@@ -1,6 +1,7 @@
 from PyQt4 import QtCore, QtGui
 import sys
 from Main_form import ModalWind
+import db_file
 
 
 class Common(QtGui.QWidget):
@@ -30,7 +31,8 @@ class Common(QtGui.QWidget):
 class MainWind(QtGui.QMainWindow, Common):
     def __init__(self, parent=None):
         super(MainWind, self).__init__(parent)
-        self.menu()
+        self.menu_bar = self.menuBar()
+        self.file = self.menu_bar.addMenu('&Меню')
         self.layout = QtGui.QVBoxLayout()
         self.frame_full = QtGui.QFrame()
         self.fr_empty = QtGui.QFrame()
@@ -40,25 +42,53 @@ class MainWind(QtGui.QMainWindow, Common):
                                       '\nизменят его лицо и фигуру, '
                                       '\nно пальцевые узоры останутся все теми же»  ')
         self.pic = QtGui.QLabel()
+
+        self.grid_start = QtGui.QGridLayout()
+        self.frame_start = QtGui.QFrame()
+        self.frame_start_empty = QtGui.QFrame()
+        self.vlay_start = QtGui.QVBoxLayout()
+        self.hlay_start = QtGui.QHBoxLayout()
+        self.button_legend = QtGui.QPushButton('Начать работу', self)
+        self.label = QtGui.QLabel('Криминалистическая лаборатория')
+
+        self.rw_login = QtGui.QLineEdit()
+        self.rw_pass = QtGui.QLineEdit()
+
+        self.menu()
         self.start_contain()
 
     def start_contain(self):
         wnd = QtGui.QWidget(self)
         wnd.setMaximumSize(1000,700)
         self.setCentralWidget(wnd)
-        self.button_legend = QtGui.QPushButton('START', self)
-        self.button_legend.setGeometry(10, 10, 60, 35)
-        self.lay = QtGui.QVBoxLayout()
-        self.lay.addWidget(self.button_legend)
-        #self.lay.setAlignment(QtCore.Qt.AlignCenter)
+        self.file.setEnabled(False)
+
+        wnd.setStyleSheet('QLabel {color: white; font-size: 30px; font-family: Proggy}'
+                          'QPushButton {font-size: 20px; font-family: Proggy}')
+
+        self.frame_start.setMaximumSize(550, 250)
+        self.frame_start.setLayout(self.grid_start)
+
+        self.frame_start_empty.setMaximumSize(8, 7)
+
+        self.hlay_start.addLayout(self.vlay_start)
+        self.vlay_start.addWidget(self.frame_start)
+        self.vlay_start.addWidget(self.frame_start_empty)
+        self.grid_start.addWidget(self.label)
+        self.grid_start.addWidget(self.button_legend)
+
+        wnd.setLayout(self.hlay_start)
+
         self.button_legend.clicked.connect(self.show_on)
 
     def show_on(self):
         self.button_legend.hide()
-        self.lay.deleteLater()
+        self.vlay_start.deleteLater()
         self.contain()
 
     def contain(self):
+        self.file.setEnabled(True)
+
         wid = QtGui.QWidget(self)
         wid.setMaximumSize(1000,700)
         self.setCentralWidget(wid)
@@ -71,16 +101,16 @@ class MainWind(QtGui.QMainWindow, Common):
         lab_pass = QtGui.QLabel('  Введите пароль:  ')
         lab_pass.setObjectName('lab_pass')
 
-        rw_login = QtGui.QLineEdit()
-        rw_pass = QtGui.QLineEdit()
+        #rw_login = QtGui.QLineEdit()
+        #rw_pass = QtGui.QLineEdit()
 
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
 
         grid.addWidget(lab_login, 1, 0)
         grid.addWidget(lab_pass, 2, 0)
-        grid.addWidget(rw_login, 1, 1)
-        grid.addWidget(rw_pass, 2, 1)
+        grid.addWidget(self.rw_login, 1, 1)
+        grid.addWidget(self.rw_pass, 2, 1)
         grid.addWidget(self.but_enter, 3, 1)
 
         self.frame_full.setFrameShape(6)
@@ -96,7 +126,6 @@ class MainWind(QtGui.QMainWindow, Common):
         self.layout_2.setStretch(2,3)
 
         self.pic.setPixmap(QtGui.QPixmap('icons/5411303_2'))
-        #self.layout_2.addLayout(self.layout_3)
         self.layout_3.addLayout(self.layout_2)
         self.layout_3.addWidget(self.pic)
 
@@ -108,9 +137,15 @@ class MainWind(QtGui.QMainWindow, Common):
                           'QPushButton:hover {background-color: #87cefa}')
 
     def on_show(self):
-        win = ModalWind(self)
-        #self.setCentralWidget(win)
-        win.show()
+        db_file.getConnection()
+        db_file.entering(self.rw_login.text(), self.rw_pass.text())
+        if True:
+            win = ModalWind(self)
+            # self.setCentralWidget(win)
+            win.show()
+        else:
+            pass
+
         #win2 = TestWind(self) ### my
         #self.setCentralWidget(win2)
         #win2.show() ### my
@@ -134,12 +169,10 @@ class MainWind(QtGui.QMainWindow, Common):
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
-        menu_bar = self.menuBar()
-
-        file = menu_bar.addMenu('&Меню')
         #file.addAction(daughter_1)
-        file.addAction(new_worker)
-        file.addAction(ext)
+
+        self.file.addAction(new_worker)
+        self.file.addAction(ext)
 
 
 if __name__ == "__main__":

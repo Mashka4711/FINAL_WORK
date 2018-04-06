@@ -1,6 +1,7 @@
 from PyQt4 import QtCore, QtGui
 import sys
 
+
 class ModalWind(QtGui.QWidget):
     def __init__(self, parent=None):
         super(ModalWind, self).__init__(parent)
