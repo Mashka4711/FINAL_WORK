@@ -2,6 +2,7 @@ from PyQt4 import QtCore, QtGui
 import sys
 from Main_form import ModalWind
 import db_file
+from Layouts import lay_window1
 
 
 class Common(QtGui.QWidget):
@@ -54,6 +55,8 @@ class MainWind(QtGui.QMainWindow, Common):
         self.rw_login = QtGui.QLineEdit()
         self.rw_pass = QtGui.QLineEdit()
 
+        self.new_worker = QtGui.QAction(QtGui.QIcon('png/QampatykB (36).png'), 'Добавить сотрудника', self)
+
         self.menu()
         self.start_contain()
 
@@ -88,21 +91,20 @@ class MainWind(QtGui.QMainWindow, Common):
 
     def contain(self):
         self.file.setEnabled(True)
+        self.new_worker.setEnabled(False)
 
         wid = QtGui.QWidget(self)
         wid.setMaximumSize(1000,700)
         self.setCentralWidget(wid)
         self.but_enter = QtGui.QPushButton('Войти', self)
         self.but_enter.clicked.connect(self.on_show)
+
         #TestWind.butt_hide.clicked.connect(self.on_return) ### my
 
         lab_login = QtGui.QLabel('  Введите логин:  ')
         lab_login.setObjectName('lab_login')
         lab_pass = QtGui.QLabel('  Введите пароль:  ')
         lab_pass.setObjectName('lab_pass')
-
-        #rw_login = QtGui.QLineEdit()
-        #rw_pass = QtGui.QLineEdit()
 
         grid = QtGui.QGridLayout()
         grid.setSpacing(10)
@@ -136,15 +138,31 @@ class MainWind(QtGui.QMainWindow, Common):
                           'border-radius: 6px; background-color: white; min-height: 30px;}'
                           'QPushButton:hover {background-color: #87cefa}')
 
+    def show_dialog(self):
+        message = QtGui.QMessageBox(self)
+        message.setIcon(QtGui.QMessageBox.Warning)
+        message.setWindowTitle("Предупреждение")
+        message.setText("Неверный логин или пароль!"
+                        "\nПовторите ввод!")
+        message.setStandardButtons(QtGui.QMessageBox.Ok)
+        message.show()
+
     def on_show(self):
         db_file.getConnection()
-        db_file.entering(self.rw_login.text(), self.rw_pass.text())
-        if True:
-            win = ModalWind(self)
-            # self.setCentralWidget(win)
-            win.show()
+        entry_condition = db_file.entering(self.rw_login.text(), self.rw_pass.text())
+        if entry_condition:
+            right = db_file.rights_check(self.rw_login)
+            if right:
+                self.new_worker.setEnabled(True)
+            else:
+                self.new_worker.setEnabled(False)
+            self.layout_3.deleteLater()
+            lay_window1(self)
+            #win = ModalWind(self)
+            # #win.show()
+            #self.setCentralWidget(win)
         else:
-            pass
+            self.show_dialog()
 
         #win2 = TestWind(self) ### my
         #self.setCentralWidget(win2)
@@ -164,14 +182,13 @@ class MainWind(QtGui.QMainWindow, Common):
         ext.setStatusTip('Exit')
         self.connect(ext, QtCore.SIGNAL('triggered()'), QtCore.SLOT('close()'))
 
-        new_worker = QtGui.QAction(QtGui.QIcon('png/QampatykB (36).png'), 'Добавить сотрудника', self)
-        new_worker.setStatusTip('New employee')
+        self.new_worker.setStatusTip('New employee')
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
         #file.addAction(daughter_1)
 
-        self.file.addAction(new_worker)
+        self.file.addAction(self.new_worker)
         self.file.addAction(ext)
 
 
