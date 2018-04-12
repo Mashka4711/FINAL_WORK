@@ -21,20 +21,16 @@ def entering(login, password):
     cur1 = conn.cursor(MySQLdb.cursors.DictCursor)
     cur1.execute(authorize_query)
     data = cur1.fetchall()
-    a = True
     if len(data) == 0:
-        a = False
-        return a
+        return False
     else:
         password_bd = {}
         for item in data:
             password_bd = dict(item)
         if (password == password_bd['emp_password']):
-            a = True
-            return a
+            return True
         else:
-            a = False
-            return a
+            return False
 
 # Проверка прав
 
@@ -48,8 +44,6 @@ def rights_check(login):
     for item in right:
         right_bd = dict(item)
         if (right_bd['emp_rights'] == 'min'):
-            a = False
-            return a
-        elif (right_bd['emp_rights'] == 'max'):
-            a = True
-            return a
+            return False
+        if (right_bd['emp_rights'] == 'max'):
+            return True

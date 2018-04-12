@@ -3,30 +3,8 @@ import sys
 from Main_form import ModalWind
 import db_file
 from Layouts import lay_window1
-
-
-class Common(QtGui.QWidget):
-    def __init__(self, parent=None):
-        super(Common, self).__init__(parent)
-        self.setFixedSize(1000, 700)
-        self.setWindowTitle("Криминалистическая лаборатория")
-        self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
-        self.setWindowIcon(QtGui.QIcon('icons/icons8-find-user-male-50.png'))
-        self.center()
-        self.fond()
-
-    def center(self):
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-
-    def fond(self):
-        back = self.palette()
-        back.setBrush(QtGui.QPalette.Normal, QtGui.QPalette.Window,
-                      QtGui.QBrush(QtGui.QPixmap('icons/ubuntism_ru_abstract_35.png')))
-        back.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window,
-                      QtGui.QBrush(QtGui.QPixmap('icons/ubuntism_ru_abstract_35.png')))
-        self.setPalette(back)
+from New_Employee import Wind
+from Common_odj import Common
 
 
 class MainWind(QtGui.QMainWindow, Common):
@@ -151,7 +129,7 @@ class MainWind(QtGui.QMainWindow, Common):
         db_file.getConnection()
         entry_condition = db_file.entering(self.rw_login.text(), self.rw_pass.text())
         if entry_condition:
-            right = db_file.rights_check(self.rw_login)
+            right = db_file.rights_check(self.rw_login.text())
             if right:
                 self.new_worker.setEnabled(True)
             else:
@@ -176,13 +154,19 @@ class MainWind(QtGui.QMainWindow, Common):
     def on_return(self):
         self.fr_empty.setFrameShape(6)
 
+    def open_new_emp(self):
+        win = Wind(self)
+        win.show()
+
     def menu(self):
-        ext = QtGui.QAction(QtGui.QIcon('png/QampatykB (75).png'), 'Выйти', self)
+        ext = QtGui.QAction(QtGui.QIcon('png/QampatykB (75).png'), 'Закрыть приложение', self)
         ext.setShortcut('Ctrl+Q')
         ext.setStatusTip('Exit')
         self.connect(ext, QtCore.SIGNAL('triggered()'), QtCore.SLOT('close()'))
 
         self.new_worker.setStatusTip('New employee')
+
+        self.connect(self.new_worker, QtCore.SIGNAL('triggered()'), self.open_new_emp)
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
