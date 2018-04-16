@@ -8,17 +8,22 @@ class Wind(Common):
         self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint)
         self.setWindowModality(QtCore.Qt.WindowModal)
 
-        butt_hide = QtGui.QPushButton('Закрыть модальное окно')
-        vbox = QtGui.QVBoxLayout()
-        vbox.addWidget(butt_hide)
-        self.setLayout(vbox)
-        butt_hide.clicked.connect(self.close)
+        self.rw_name = QtGui.QLineEdit()
+        self.rw_surname = QtGui.QLineEdit()
+        self.rw_patr = QtGui.QLineEdit()
+        self.rw_post = QtGui.QLineEdit()
+        self.rw_right = QtGui.QLineEdit()
+        self.rw_age = QtGui.QLineEdit()
+        self.rw_education = QtGui.QLineEdit()
+        self.rw_login_new = QtGui.QLineEdit()
+        self.rw_pass_new = QtGui.QLineEdit()
+        self.button_new = QtGui.QPushButton('   Добавить   ')
+
+        self.contain()
+
+# Содержимое формы сохранения нового сотрудника
 
     def contain(self):
-        wid = QtGui.QWidget(self)
-        wid.setMaximumSize(1000, 700)
-        self.setCentralWidget(wid)
-
         lab_name = QtGui.QLabel('  Имя:  ')
         lab_name.setObjectName('lab_name')
         lab_surname = QtGui.QLabel('  Фамилия:  ')
@@ -29,6 +34,84 @@ class Wind(Common):
         lab_post.setObjectName('lab_post')
         lab_right = QtGui.QLabel('  Права:  ')
         lab_right.setObjectName('lab_right')
+        lab_age = QtGui.QLabel('  Возраст:  ')
+        lab_age.setObjectName('lab_age')
+        lab_education = QtGui.QLabel('  Образование:  ')
+        lab_education.setObjectName('lab_education')
+        lab_login_new = QtGui.QLabel('  Логин:  ')
+        lab_login_new.setObjectName('lab_login_new')
+        lab_pass_new = QtGui.QLabel('  Пароль:  ')
+        lab_pass_new.setObjectName('lab_pass_new')
+
+        grid_left = QtGui.QGridLayout()
+        grid_left.setSpacing(10)
+
+        grid_right = QtGui.QGridLayout()
+        grid_right.setSpacing(10)
+
+        grid_left.addWidget(lab_name, 1, 0)
+        grid_left.addWidget(self.rw_name, 1, 1)
+        grid_left.addWidget(lab_surname, 2, 0)
+        grid_left.addWidget(self.rw_surname, 2, 1)
+        grid_left.addWidget(lab_patr, 3, 0)
+        grid_left.addWidget(self.rw_patr, 3, 1)
+        grid_left.addWidget(lab_age, 4, 0)
+        grid_left.addWidget(self.rw_age, 4, 1)
+        grid_left.addWidget(lab_education, 5, 0)
+        grid_left.addWidget(self.rw_education, 5, 1)
+
+        grid_right.addWidget(lab_post, 1, 0)
+        grid_right.addWidget(self.rw_post, 1, 1)
+        grid_right.addWidget(lab_right, 2, 0)
+        grid_right.addWidget(self.rw_right, 2, 1)
+        grid_right.addWidget(lab_login_new, 3, 0)
+        grid_right.addWidget(self.rw_login_new, 3, 1)
+        grid_right.addWidget(lab_pass_new, 4, 0)
+        grid_right.addWidget(self.rw_pass_new, 4, 1)
+
+        frame_left = QtGui.QFrame()
+        frame_left.setFrameShape(6)
+        frame_left.setLayout(grid_left)
+        frame_left.setMaximumSize(450, 500)
+
+        frame_right = QtGui.QFrame()
+        frame_right.setFrameShape(6)
+        frame_right.setLayout(grid_right)
+        frame_right.setMaximumSize(450, 250)
+
+        lab_intro = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните необходимые поля')
+        self.button_new.clicked.connect(self.save_new_emp)
+
+        layout_button = QtGui.QHBoxLayout()
+        layout_button.addStretch(1)
+        layout_button.addWidget(self.button_new)
+        layout_button.addStretch(1)
+
+        layout_horizontal = QtGui.QHBoxLayout()
+        layout_horizontal.addWidget(frame_left)
+        layout_horizontal.addWidget(frame_right)
+
+        layout_vertical = QtGui.QVBoxLayout()
+        layout_vertical.addStretch(1)
+        layout_vertical.addWidget(lab_intro)
+        layout_vertical.addStretch(1)
+        layout_vertical.addLayout(layout_horizontal)
+        layout_vertical.addStretch(2)
+        layout_vertical.addLayout(layout_button)
+        layout_vertical.addStretch(1)
+
+        self.setLayout(layout_vertical)
+
+        self.setStyleSheet('QLabel {color: white; font-size: 20px; font-family: Proggy}'
+                           'QLineEdit {font-size: 20px}'
+                           'QPushButton {font-size: 20px; font-family: Proggy; border: 2px;'
+                           'border-radius: 6px; background-color: white; min-height: 30px;}'
+                           'QPushButton:hover {background-color: #87cefa}')
+
+# Обработка кнопки сохранения
+
+    def save_new_emp(self):
+        pass
 
 
 
