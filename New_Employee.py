@@ -24,23 +24,23 @@ class Wind(Common):
 # Содержимое формы сохранения нового сотрудника
 
     def contain(self):
-        lab_name = QtGui.QLabel('  Имя:  ')
+        lab_name = QtGui.QLabel(' *  Имя:  ')
         lab_name.setObjectName('lab_name')
-        lab_surname = QtGui.QLabel('  Фамилия:  ')
+        lab_surname = QtGui.QLabel(' *  Фамилия:  ')
         lab_surname.setObjectName('lab_surname')
-        lab_patr = QtGui.QLabel('  Отчество:  ')
+        lab_patr = QtGui.QLabel('     Отчество:  ')
         lab_patr.setObjectName('lab_patr')
-        lab_post = QtGui.QLabel('  Должность:  ')
+        lab_post = QtGui.QLabel(' *  Должность:  ')
         lab_post.setObjectName('lab_post')
-        lab_right = QtGui.QLabel('  Права:  ')
+        lab_right = QtGui.QLabel(' *  Права:  ')
         lab_right.setObjectName('lab_right')
-        lab_age = QtGui.QLabel('  Возраст:  ')
+        lab_age = QtGui.QLabel('     Возраст:  ')
         lab_age.setObjectName('lab_age')
-        lab_education = QtGui.QLabel('  Образование:  ')
+        lab_education = QtGui.QLabel('     Образование:  ')
         lab_education.setObjectName('lab_education')
-        lab_login_new = QtGui.QLabel('  Логин:  ')
+        lab_login_new = QtGui.QLabel(' *  Логин:  ')
         lab_login_new.setObjectName('lab_login_new')
-        lab_pass_new = QtGui.QLabel('  Пароль:  ')
+        lab_pass_new = QtGui.QLabel(' *  Пароль:  ')
         lab_pass_new.setObjectName('lab_pass_new')
 
         grid_left = QtGui.QGridLayout()
@@ -79,8 +79,11 @@ class Wind(Common):
         frame_right.setLayout(grid_right)
         frame_right.setMaximumSize(450, 250)
 
-        lab_intro = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните необходимые поля')
+        lab_intro = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните следующие поля.'
+                                 '\nПоля, отмеченные * , обязательны к заполнению!')
+        lab_intro.setObjectName('lab_intro')
         self.button_new.clicked.connect(self.save_new_emp)
+        self.button_new.setObjectName('button_new')
 
         layout_button = QtGui.QHBoxLayout()
         layout_button.addStretch(1)
@@ -101,18 +104,34 @@ class Wind(Common):
         layout_vertical.addStretch(1)
 
         self.setLayout(layout_vertical)
-
-        self.setStyleSheet('QLabel {color: white; font-size: 20px; font-family: Proggy}'
+        self.setStyleSheet('QLabel#lab_name, #lab_surname, #lab_patr, #lab_age, #lab_post, #lab_education,'
+                           '#lab_right, #lab_login_new, #lab_pass_new, #lab_intro'
+                           ' {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
-                           'QPushButton {font-size: 20px; font-family: Proggy; border: 2px;'
+                           'QPushButton#button_new {font-size: 20px; font-family: Proggy; border: 2px;'
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
-                           'QPushButton:hover {background-color: #87cefa}')
+                           'QPushButton#button_new:hover {background-color: #87cefa}')
 
 # Обработка кнопки сохранения
 
     def save_new_emp(self):
-        pass
+        if (len(self.rw_name.text()) == 0 or
+                len(self.rw_surname.text()) == 0 or
+                len(self.rw_post.text()) == 0 or
+                len(self.rw_right.text()) == 0 or
+                len(self.rw_login_new.text()) == 0 or
+                len(self.rw_pass_new.text()) == 0):
+            self.warning()
 
+# Предупреждение
+
+    def warning(self):
+        message = QtGui.QMessageBox(self)
+        message.setIcon(QtGui.QMessageBox.Warning)
+        message.setWindowTitle("Предупреждение")
+        message.setText("Заполните все поля со * !")
+        message.setStandardButtons(QtGui.QMessageBox.Ok)
+        message.show()
 
 
 if __name__ == "__main__":
