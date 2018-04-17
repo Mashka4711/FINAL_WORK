@@ -11,10 +11,14 @@ class Common(QtGui.QWidget):
         self.center()
         self.fond()
 
+# Центровка
+
     def center(self):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+
+# Фон
 
     def fond(self):
         back = self.palette()
@@ -23,3 +27,13 @@ class Common(QtGui.QWidget):
         back.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window,
                       QtGui.QBrush(QtGui.QPixmap('icons/ubuntism_ru_abstract_35.png')))
         self.setPalette(back)
+
+# Предупреждение
+
+    def warning(self, text):
+        message = QtGui.QMessageBox(self)
+        message.setIcon(QtGui.QMessageBox.Warning)
+        message.setWindowTitle("Предупреждение")
+        message.setText(text)
+        message.setStandardButtons(QtGui.QMessageBox.Ok)
+        message.show()

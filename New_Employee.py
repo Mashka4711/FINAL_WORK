@@ -1,5 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
+import db_file
 
 
 class Wind(Common):
@@ -121,17 +122,19 @@ class Wind(Common):
                 len(self.rw_right.text()) == 0 or
                 len(self.rw_login_new.text()) == 0 or
                 len(self.rw_pass_new.text()) == 0):
-            self.warning()
+            self.warning("Заполните все поля со * !")
 
-# Предупреждение
+        #db_file.getConnection()
+        login_comp = db_file.login_comparison(self.rw_login_new.text())
+        pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
+        if login_comp:
+            self.warning("Логин уже существует!\nВвелите другой!")
+        if pass_comp:
+            self.warning("Пароль уже существует!\nВведите другой!")
+        db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(), self.rw_age.text(),
+                             self.rw_post.text(), self.rw_education.text(), self.rw_right.text(),
+                             self.rw_login_new.text(), self.rw_pass_new.text())
 
-    def warning(self):
-        message = QtGui.QMessageBox(self)
-        message.setIcon(QtGui.QMessageBox.Warning)
-        message.setWindowTitle("Предупреждение")
-        message.setText("Заполните все поля со * !")
-        message.setStandardButtons(QtGui.QMessageBox.Ok)
-        message.show()
 
 
 if __name__ == "__main__":

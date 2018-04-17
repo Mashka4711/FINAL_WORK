@@ -126,7 +126,7 @@ class MainWind(QtGui.QMainWindow, Common):
         message.show()
 
     def on_show(self):
-        db_file.getConnection()
+        db_file.getConnection() # проверить,работает ли без этой строчки !!!!!!!!!!!!!!
         entry_condition = db_file.entering(self.rw_login.text(), self.rw_pass.text())
         if entry_condition:
             right = db_file.rights_check(self.rw_login.text())
