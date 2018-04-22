@@ -79,11 +79,50 @@ def pass_comparison(pass_rw):
 # Запись в базу нового сотрудника
 
 
-def new_emp_note(name, surname, patr, age, post, education, right, login, password):
+def new_emp_note(name, surname, patr, age, post, education, right, login, password, photo):
     conn = getConnection()
     note_query = "INSERT INTO employees (emp_surname, emp_name, emp_patronimyc, emp_post, emp_rights," \
-                 "emp_age, emp_education, emp_login, emp_password) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s'," \
-                 " '%s', '%s')" % (surname, name, patr, post, right, age, education, login, password)
-    curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
-    curs_note.execute(note_query)
+                 "emp_age, emp_education, emp_login, emp_password, emp_photo) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s', '%s', '%s')" % (surname, name, patr, post, right, age, education, login,
+                                                     password, photo)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+
+
+# Загрузка записи из базыиз таблицы сотрудников
+
+
+def load_emp_note():
+    conn = getConnection()
+    notes_query = "SELECT * FROM employees"
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    entries = []
+    for note in notes:
+        str_id = note['id_emp']
+        str_name = note['emp_surname'] + " " + note['emp_name'] + " " + note['emp_patronimyc']
+        str_age = note['emp_age']
+        str_education = note['emp_education']
+        str_post = note['emp_post']
+        str_rights = note['emp_rights']
+        str_login = note['emp_login']
+        str_pass = note['emp_password']
+        str_photo = note['emp_photo']
+        entries.append( [str_id, str_name, str_age, str_education, str_post, str_rights, str_login, str_pass, str_photo] )
+    return entries
+
+
+# Удаление записи из таблицы сотрудников
+
+
+def del_emp(id_employee):
+    conn = getConnection()
+    del_query = "DELETE FROM employees WHERE id_emp='%s'" % id_employee
+    curs_del = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_del.execute(del_query)
     conn.commit()

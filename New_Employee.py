@@ -13,14 +13,25 @@ class Wind(Common):
         self.rw_surname = QtGui.QLineEdit()
         self.rw_patr = QtGui.QLineEdit()
         self.rw_post = QtGui.QLineEdit()
-        self.rw_right = QtGui.QLineEdit()
+        self.rw_right = QtGui.QComboBox()
         self.rw_age = QtGui.QLineEdit()
         self.rw_education = QtGui.QLineEdit()
         self.rw_login_new = QtGui.QLineEdit()
         self.rw_pass_new = QtGui.QLineEdit()
+        self.rw_photo = QtGui.QLineEdit()
         self.button_new = QtGui.QPushButton('   Добавить   ')
 
         self.contain()
+
+        self.rw_right.addItems(["min", "max", "789"])
+
+# Смещение окна относительно главного для эффекта каскадного расположения окон
+
+    def center(self):
+        offset = 25
+        screen = QtGui.QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2 + offset, (screen.height() - size.height()) / 2 + offset)
 
 # Содержимое формы сохранения нового сотрудника
 
@@ -43,6 +54,11 @@ class Wind(Common):
         lab_login_new.setObjectName('lab_login_new')
         lab_pass_new = QtGui.QLabel(' *  Пароль:  ')
         lab_pass_new.setObjectName('lab_pass_new')
+
+        lab_photo = QtGui.QLabel('     Фото:  ')
+        lab_photo.setObjectName('lab_photo')
+
+        empty_space = QtGui.QLabel("")
 
         grid_left = QtGui.QGridLayout()
         grid_left.setSpacing(10)
@@ -69,6 +85,9 @@ class Wind(Common):
         grid_right.addWidget(self.rw_login_new, 3, 1)
         grid_right.addWidget(lab_pass_new, 4, 0)
         grid_right.addWidget(self.rw_pass_new, 4, 1)
+        # grid_right.addWidget(empty_space, 5, 0)
+        grid_right.addWidget(lab_photo, 5, 0)
+        grid_right.addWidget(self.rw_photo, 5, 1)
 
         frame_left = QtGui.QFrame()
         frame_left.setFrameShape(6)
@@ -81,7 +100,8 @@ class Wind(Common):
         frame_right.setMaximumSize(450, 250)
 
         lab_intro = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните следующие поля.'
-                                 '\nПоля, отмеченные * , обязательны к заполнению!')
+                                 '\nПоля, отмеченные * , обязательны к заполнению!'
+                                 '\nДля добавления фото введите путь к нему: /icons...')
         lab_intro.setObjectName('lab_intro')
         self.button_new.clicked.connect(self.save_new_emp)
         self.button_new.setObjectName('button_new')
@@ -106,9 +126,10 @@ class Wind(Common):
 
         self.setLayout(layout_vertical)
         self.setStyleSheet('QLabel#lab_name, #lab_surname, #lab_patr, #lab_age, #lab_post, #lab_education,'
-                           '#lab_right, #lab_login_new, #lab_pass_new, #lab_intro'
+                           '#lab_right, #lab_login_new, #lab_pass_new, #lab_intro, #lab_photo'
                            ' {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
+                           'QComboBox {font-size: 20px}'
                            'QPushButton#button_new {font-size: 20px; font-family: Proggy; border: 2px;'
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
                            'QPushButton#button_new:hover {background-color: #87cefa}')
@@ -119,22 +140,22 @@ class Wind(Common):
         if (len(self.rw_name.text()) == 0 or
                 len(self.rw_surname.text()) == 0 or
                 len(self.rw_post.text()) == 0 or
-                len(self.rw_right.text()) == 0 or
+                len(self.rw_right.currentText()) == 0 or
                 len(self.rw_login_new.text()) == 0 or
                 len(self.rw_pass_new.text()) == 0):
             self.warning("Заполните все поля со * !")
 
-        #db_file.getConnection()
-        login_comp = db_file.login_comparison(self.rw_login_new.text())
-        pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
-        if login_comp:
-            self.warning("Логин уже существует!\nВвелите другой!")
-        if pass_comp:
-            self.warning("Пароль уже существует!\nВведите другой!")
-        db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(), self.rw_age.text(),
-                             self.rw_post.text(), self.rw_education.text(), self.rw_right.text(),
-                             self.rw_login_new.text(), self.rw_pass_new.text())
-
+        else:
+            db_file.getConnection()
+            login_comp = db_file.login_comparison(self.rw_login_new.text())
+            pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
+            if login_comp:
+                self.warning("Логин уже существует!\nВвелите другой!")
+            if pass_comp:
+                self.warning("Пароль уже существует!\nВведите другой!")
+            db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(), self.rw_age.text(),
+                                 self.rw_post.text(), self.rw_education.text(), self.rw_right.currentText(),
+                                 self.rw_login_new.text(), self.rw_pass_new.text(), self.rw_photo.text())
 
 
 if __name__ == "__main__":

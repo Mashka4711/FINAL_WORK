@@ -4,6 +4,7 @@ from Main_form import ModalWind
 import db_file
 from Layouts import lay_window1
 from New_Employee import Wind
+from Employees_list_window import EmployeesListWindow
 from Common_odj import Common
 
 
@@ -34,6 +35,7 @@ class MainWind(QtGui.QMainWindow, Common):
         self.rw_pass = QtGui.QLineEdit()
 
         self.new_worker = QtGui.QAction(QtGui.QIcon('png/QampatykB (36).png'), 'Добавить сотрудника', self)
+        self.workers_list = QtGui.QAction(QtGui.QIcon('png/QampatykB (37).png'), 'Список сотрудников', self)
 
         self.menu()
         self.start_contain()
@@ -70,6 +72,7 @@ class MainWind(QtGui.QMainWindow, Common):
     def contain(self):
         self.file.setEnabled(True)
         self.new_worker.setEnabled(False)
+        self.workers_list.setEnabled(False)
 
         wid = QtGui.QWidget(self)
         wid.setMaximumSize(1000,700)
@@ -126,14 +129,16 @@ class MainWind(QtGui.QMainWindow, Common):
         message.show()
 
     def on_show(self):
-        db_file.getConnection() # проверить,работает ли без этой строчки !!!!!!!!!!!!!!
+        db_file.getConnection()  # проверить,работает ли без этой строчки !!!!!!!!!!!!!!
         entry_condition = db_file.entering(self.rw_login.text(), self.rw_pass.text())
         if entry_condition:
             right = db_file.rights_check(self.rw_login.text())
             if right:
                 self.new_worker.setEnabled(True)
+                self.workers_list.setEnabled(True)
             else:
                 self.new_worker.setEnabled(False)
+                self.workers_list.setEnabled(False)
             self.layout_3.deleteLater()
             lay_window1(self)
             #win = ModalWind(self)
@@ -158,6 +163,10 @@ class MainWind(QtGui.QMainWindow, Common):
         win = Wind(self)
         win.show()
 
+    def open_emp_list(self):
+        win = EmployeesListWindow(self)
+        win.show()
+
     def menu(self):
         ext = QtGui.QAction(QtGui.QIcon('png/QampatykB (75).png'), 'Закрыть приложение', self)
         ext.setShortcut('Ctrl+Q')
@@ -167,12 +176,14 @@ class MainWind(QtGui.QMainWindow, Common):
         self.new_worker.setStatusTip('New employee')
 
         self.connect(self.new_worker, QtCore.SIGNAL('triggered()'), self.open_new_emp)
+        self.connect(self.workers_list, QtCore.SIGNAL('triggered()'), self.open_emp_list)
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
         #file.addAction(daughter_1)
 
         self.file.addAction(self.new_worker)
+        self.file.addAction(self.workers_list)
         self.file.addAction(ext)
 
 
