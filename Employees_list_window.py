@@ -17,7 +17,6 @@ class EmployeesListWindow(Common):
         self.button_del = QtGui.QPushButton('   Удалить   ')
 
         self.contain()
-        self.center()
 
 
 # Смещение окна относительно главного для эффекта каскадного расположения окон

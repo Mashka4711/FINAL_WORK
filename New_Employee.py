@@ -23,7 +23,7 @@ class Wind(Common):
 
         self.contain()
 
-        self.rw_right.addItems(["min", "max", "789"])
+        self.rw_right.addItems(["min", "max"])
 
 # Смещение окна относительно главного для эффекта каскадного расположения окон
 
@@ -54,11 +54,8 @@ class Wind(Common):
         lab_login_new.setObjectName('lab_login_new')
         lab_pass_new = QtGui.QLabel(' *  Пароль:  ')
         lab_pass_new.setObjectName('lab_pass_new')
-
         lab_photo = QtGui.QLabel('     Фото:  ')
         lab_photo.setObjectName('lab_photo')
-
-        empty_space = QtGui.QLabel("")
 
         grid_left = QtGui.QGridLayout()
         grid_left.setSpacing(10)
@@ -85,7 +82,6 @@ class Wind(Common):
         grid_right.addWidget(self.rw_login_new, 3, 1)
         grid_right.addWidget(lab_pass_new, 4, 0)
         grid_right.addWidget(self.rw_pass_new, 4, 1)
-        # grid_right.addWidget(empty_space, 5, 0)
         grid_right.addWidget(lab_photo, 5, 0)
         grid_right.addWidget(self.rw_photo, 5, 1)
 
@@ -99,10 +95,10 @@ class Wind(Common):
         frame_right.setLayout(grid_right)
         frame_right.setMaximumSize(450, 250)
 
-        lab_intro = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните следующие поля.'
-                                 '\nПоля, отмеченные * , обязательны к заполнению!'
-                                 '\nДля добавления фото введите путь к нему: /icons...')
-        lab_intro.setObjectName('lab_intro')
+        lab_heading = QtGui.QLabel('Для того, чтобы добавить сотрудника, заполните следующие поля.'
+                                   '\nПоля, отмеченные * , обязательны к заполнению!'
+                                   '\nДля добавления фото введите путь к нему: /icons...')
+        lab_heading.setObjectName('lab_heading')
         self.button_new.clicked.connect(self.save_new_emp)
         self.button_new.setObjectName('button_new')
 
@@ -117,7 +113,7 @@ class Wind(Common):
 
         layout_vertical = QtGui.QVBoxLayout()
         layout_vertical.addStretch(1)
-        layout_vertical.addWidget(lab_intro)
+        layout_vertical.addWidget(lab_heading)
         layout_vertical.addStretch(1)
         layout_vertical.addLayout(layout_horizontal)
         layout_vertical.addStretch(2)
@@ -126,7 +122,7 @@ class Wind(Common):
 
         self.setLayout(layout_vertical)
         self.setStyleSheet('QLabel#lab_name, #lab_surname, #lab_patr, #lab_age, #lab_post, #lab_education,'
-                           '#lab_right, #lab_login_new, #lab_pass_new, #lab_intro, #lab_photo'
+                           '#lab_right, #lab_login_new, #lab_pass_new, #lab_heading, #lab_photo'
                            ' {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
                            'QComboBox {font-size: 20px}'

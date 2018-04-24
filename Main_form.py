@@ -20,26 +20,3 @@ class ModalWind(QtGui.QWidget):
         vbox.addWidget(butt_hide)
         self.setLayout(vbox)
         butt_hide.clicked.connect(self.close)
-
-
-    '''def __init__(self, parent=None):
-        super(ModalWind, self).__init__(parent)
-       # self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint)
-        #self.setWindowModality(QtCore.Qt.WindowModal)
-        self.setWindowTitle("Криминалистическая лаборатория")
-        self.setFixedSize(1000, 700)
-
-        pal_1 = self.palette()
-        pal_1.setColor(QtGui.QPalette.Normal, QtGui.QPalette.Window,
-                       QtGui.QColor("#1b006b"))
-        self.setPalette(pal_1)
-
-        butt_hide = QtGui.QPushButton('Закрыть модальное окно')
-        vbox = QtGui.QVBoxLayout()
-        vbox.addWidget(butt_hide)
-        self.setLayout(vbox)
-
-
-        #QtCore.QObject.connect(butt_hide, QtCore.SIGNAL("clicked()"), self, QtCore.SLOT("close()"))
-        butt_hide.clicked.connect(self.close)
-        self.show()'''

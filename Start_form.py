@@ -40,6 +40,8 @@ class MainWind(QtGui.QMainWindow, Common):
         self.menu()
         self.start_contain()
 
+# Стартовое заполнение
+
     def start_contain(self):
         wnd = QtGui.QWidget(self)
         wnd.setMaximumSize(1000,700)
@@ -64,10 +66,14 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.button_legend.clicked.connect(self.show_on)
 
+# Открытие формы авторизации
+
     def show_on(self):
         self.button_legend.hide()
         self.vlay_start.deleteLater()
         self.contain()
+
+# Содержимое формы авторизации
 
     def contain(self):
         self.file.setEnabled(True)
@@ -79,8 +85,6 @@ class MainWind(QtGui.QMainWindow, Common):
         self.setCentralWidget(wid)
         self.but_enter = QtGui.QPushButton('Войти', self)
         self.but_enter.clicked.connect(self.on_show)
-
-        #TestWind.butt_hide.clicked.connect(self.on_return) ### my
 
         lab_login = QtGui.QLabel('  Введите логин:  ')
         lab_login.setObjectName('lab_login')
@@ -100,7 +104,6 @@ class MainWind(QtGui.QMainWindow, Common):
         self.frame_full.setLayout(grid)
         self.frame_full.setMaximumSize(450,250)
         self.fr_empty.setMaximumSize(450,250)
-        #self.fr_empty.setFrameShape(6) ### my
         self.layout_2.addWidget(self.lab_quote)
         self.layout_2.setStretch(0,1)
         self.layout_2.addWidget(self.frame_full)
@@ -119,14 +122,7 @@ class MainWind(QtGui.QMainWindow, Common):
                           'border-radius: 6px; background-color: white; min-height: 30px;}'
                           'QPushButton:hover {background-color: #87cefa}')
 
-    def show_dialog(self):
-        message = QtGui.QMessageBox(self)
-        message.setIcon(QtGui.QMessageBox.Warning)
-        message.setWindowTitle("Предупреждение")
-        message.setText("Неверный логин или пароль!"
-                        "\nПовторите ввод!")
-        message.setStandardButtons(QtGui.QMessageBox.Ok)
-        message.show()
+# Открытие основного окна
 
     def on_show(self):
         db_file.getConnection()  # проверить,работает ли без этой строчки !!!!!!!!!!!!!!
@@ -145,27 +141,22 @@ class MainWind(QtGui.QMainWindow, Common):
             # #win.show()
             #self.setCentralWidget(win)
         else:
-            self.show_dialog()
+            self.warning("Неверный логин или пароль!"
+                         "\nПовторите ввод!")
 
-        #win2 = TestWind(self) ### my
-        #self.setCentralWidget(win2)
-        #win2.show() ### my
-        # var = TestWind.butt_hide
-        #if (self.fr_empty.isVisible()):
-        #    self.fr_empty.hide()
-        #else:
-        #    self.fr_empty.show()
-
-    def on_return(self):
-        self.fr_empty.setFrameShape(6)
+# Открытие окна добавления нового сотрудника
 
     def open_new_emp(self):
         win = Wind(self)
         win.show()
 
+# Открытие окна со списком сотрудников
+
     def open_emp_list(self):
         win = EmployeesListWindow(self)
         win.show()
+
+# Описание меню
 
     def menu(self):
         ext = QtGui.QAction(QtGui.QIcon('png/QampatykB (75).png'), 'Закрыть приложение', self)
