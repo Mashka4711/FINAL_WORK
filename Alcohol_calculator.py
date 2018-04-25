@@ -15,14 +15,13 @@ class Calculator(Common):
         self.weight = QtGui.QLineEdit()
         self.alc_cont = QtGui.QLineEdit()
         self.amount = QtGui.QLineEdit()
+        self.sex = float
+        self.deficiency = int
+        self.calculate = QtGui.QPushButton('  Рассчитать  ')
 
-        # self.radio_man.toggled.connect(lambda: self.calculation())
         self.contain()
-    def center(self):
-        offset = 25
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2 + offset, (screen.height() - size.height()) / 2 + offset)
+
+# Содержимое формы калькулятора
 
     def contain(self):
         lab_title = QtGui.QLabel('Расчет максимальной концентрации алкоголя в крови человека в промилле (‰)')
@@ -36,6 +35,12 @@ class Calculator(Common):
         lab_alc_cont = QtGui.QLabel('Содержание\nспирта %: ')
         lab_amount = QtGui.QLabel('Количество\nвыпитого, мл: ')
         lab_fullness = QtGui.QLabel('Наполненность: ')
+
+        self.calculate.clicked.connect(self.calculation)
+        self.radio_man.clicked.connect(lambda: self.reduction_ratio(0.7))
+        self.radio_woman.clicked.connect(lambda: self.reduction_ratio(0.6))
+        self.less.clicked.connect(lambda: self.resorption_def(10))
+        self.full.clicked.connect(lambda: self.resorption_def(30))
 
         grid_top = QtGui.QGridLayout()
         grid_mid = QtGui.QGridLayout()
@@ -84,6 +89,7 @@ class Calculator(Common):
         vertical.addWidget(frame_mid)
         vertical.addWidget(separator1)
         vertical.addWidget(frame_bot)
+        vertical.addWidget(self.calculate)
 
 
         self.setLayout(vertical)
@@ -94,10 +100,25 @@ class Calculator(Common):
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
                            'QPushButton#button_new:hover {background-color: #87cefa}')
 
-    def calculation(self):
-        if self.radio_man.isChecked():
-            print('yuhuuu')
+# Коэффициент редукции
 
+    def reduction_ratio(self, value):
+        self.sex = value
+
+# Дефицит резорбции
+
+    def resorption_def(self, value):
+        self.deficiency = value
+
+# Расчет
+
+    def calculation(self):
+        denominator = round(self.sex * int(self.weight.text()))
+        pure_alcohol = int(self.amount.text()) * int(self.alc_cont.text()) / 100 * 0.79
+        deficiency = pure_alcohol / self.deficiency
+        numerator = pure_alcohol - deficiency
+        concentration = round(numerator / denominator, 2)
+        return concentration
 
 
 if __name__ == "__main__":

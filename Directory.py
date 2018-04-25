@@ -14,15 +14,6 @@ class TermList(Common):
 
         self.contain()
 
-
-# Смещение окна относительно главного для эффекта каскадного расположения окон
-
-    def center(self):
-        offset = 25
-        screen = QtGui.QDesktopWidget().screenGeometry()
-        size = self.geometry()
-        self.move((screen.width() - size.width()) / 2 + offset, (screen.height() - size.height()) / 2 + offset)
-
 # Содержимое окна
 
     def contain(self):

@@ -122,6 +122,14 @@ class MainWind(QtGui.QMainWindow, Common):
                           'border-radius: 6px; background-color: white; min-height: 30px;}'
                           'QPushButton:hover {background-color: #87cefa}')
 
+
+# Центровка
+
+    def center(self):
+        screen = QtGui.QDesktopWidget().screenGeometry()
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+
 # Открытие основного окна
 
     def on_show(self):
