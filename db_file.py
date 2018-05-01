@@ -93,7 +93,7 @@ def new_emp_note(name, surname, patr, age, post, education, right, login, passwo
     conn.commit()
 
 
-# Загрузка записи из базыиз таблицы сотрудников
+# Загрузка записи из базы - из таблицы сотрудников
 
 
 def load_emp_note():
@@ -126,3 +126,34 @@ def del_emp(id_employee):
     curs_del = conn.cursor(MySQLdb.cursors.DictCursor)
     curs_del.execute(del_query)
     conn.commit()
+
+
+# Загрузка справочника
+
+
+def load_directory(word_part):
+    conn = getConnection()
+    notes_query = "SELECT term_name FROM guide WHERE term_name LIKE '" + word_part + "%'"
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    words = []
+    for note in notes:
+        str_word = note['term_name']
+        words.append(str_word)
+    return words
+
+
+# загрузка описания для выбранного слова из справочника
+
+
+def load_description(word):
+    conn = getConnection()
+    notes_query = "SELECT * FROM guide WHERE term_name = '" + word + "'"
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    str_word = ""
+    for note in notes:
+        str_word = note['description']
+    return str_word

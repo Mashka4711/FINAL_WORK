@@ -138,7 +138,7 @@ class Wind(Common):
             login_comp = db_file.login_comparison(self.rw_login_new.text())
             pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
             if login_comp:
-                self.warning("Логин уже существует!\nВвелите другой!")
+                self.warning("Логин уже существует!\nВведите другой!")
             if pass_comp:
                 self.warning("Пароль уже существует!\nВведите другой!")
             db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(), self.rw_age.text(),

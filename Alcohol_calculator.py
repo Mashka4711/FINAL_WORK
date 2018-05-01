@@ -1,5 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
+import datetime
 
 
 class Calculator(Common):
@@ -18,6 +19,7 @@ class Calculator(Common):
         self.sex = float
         self.deficiency = int
         self.calculate = QtGui.QPushButton('  Рассчитать  ')
+        self.write = QtGui.QPushButton('  Записать в базу  ')
 
         self.contain()
 
@@ -33,10 +35,23 @@ class Calculator(Common):
         lab_drink = QtGui.QLabel('Напиток: ')
         lab_drink.setObjectName('lab_drink')
         lab_alc_cont = QtGui.QLabel('Содержание\nспирта %: ')
+        lab_alc_cont.setObjectName('lab_alc_cont')
         lab_amount = QtGui.QLabel('Количество\nвыпитого, мл: ')
+        lab_amount.setObjectName('lab_amount')
         lab_fullness = QtGui.QLabel('Наполненность: ')
+        lab_fullness.setObjectName('lab_fullness')
+        self.calculate.setObjectName('calculate')
+        self.write.setObjectName('write')
+        lab_result = QtGui.QLabel('Результаты\nМаксимальная концентрация этанола\nв крови в промилле достигает:')
+        lab_result.setObjectName('lab_result')
+        self.lab_concentration = QtGui.QLabel()
+        self.lab_concentration.setObjectName('lab_concentration')
 
-        self.calculate.clicked.connect(self.calculation)
+        #lab_title.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+
+        self.calculate.clicked.connect(self.invalid_input)
+        # self.calculate.clicked.connect(self.get_data)
+
         self.radio_man.clicked.connect(lambda: self.reduction_ratio(0.7))
         self.radio_woman.clicked.connect(lambda: self.reduction_ratio(0.6))
         self.less.clicked.connect(lambda: self.resorption_def(10))
@@ -61,6 +76,7 @@ class Calculator(Common):
         grid_bot.addWidget(lab_fullness, 0, 0)
         grid_bot.addWidget(self.less, 0, 2)
         grid_bot.addWidget(self.full, 0, 3)
+        grid_bot.addWidget(self.calculate)
 
         separator = QtGui.QFrame()
         separator.setFrameStyle(QtGui.QFrame.HLine | QtGui.QFrame.Raised)
@@ -82,35 +98,108 @@ class Calculator(Common):
         frame_bot.setMaximumSize(400, 100)
         frame_bot.setLayout(grid_bot)
 
-        vertical = QtGui.QVBoxLayout()
-        vertical.addWidget(lab_title)
-        vertical.addWidget(frame_top)
-        vertical.addWidget(separator)
-        vertical.addWidget(frame_mid)
-        vertical.addWidget(separator1)
-        vertical.addWidget(frame_bot)
-        vertical.addWidget(self.calculate)
+        frame_data = QtGui.QFrame()
+        frame_data.setMaximumSize(400, 200)
+        frame_data.setFrameShape(6)
+
+        result_lay = QtGui.QVBoxLayout()
+        result_lay.addWidget(lab_result)
+        result_lay.addWidget(self.lab_concentration)
+        self.lab_concentration.setAlignment(QtCore.Qt.AlignCenter)
+
+        frame_result = QtGui.QFrame()
+        frame_result.setMaximumSize(400, 200)
+        frame_result.setFrameShape(6)
+        frame_result.setLayout(result_lay)
+
+        button_lay = QtGui.QHBoxLayout()
+        button_lay.addWidget(self.write)
+        frame_button = QtGui.QFrame()
+        frame_button.setMaximumSize(400,55)
+        frame_button.setLayout(button_lay)
+
+        vertical_left = QtGui.QVBoxLayout()
+        # vertical_left.addWidget(lab_title)
+        vertical_left.addWidget(frame_top)
+        vertical_left.addWidget(separator)
+        vertical_left.addWidget(frame_mid)
+        vertical_left.addWidget(separator1)
+        vertical_left.addWidget(frame_bot)
 
 
-        self.setLayout(vertical)
-        self.setStyleSheet('QLabel {color: white; font-size: 20px; font-family: Proggy}'
+
+        vertical_right = QtGui.QVBoxLayout()
+        vertical_right.addWidget(frame_data)
+        vertical_right.addWidget(frame_result)
+        vertical_right.addWidget(frame_button)
+
+        horizontal = QtGui.QHBoxLayout()
+        horizontal.addLayout(vertical_left)
+        horizontal.addLayout(vertical_right)
+
+        horiz_top = QtGui.QHBoxLayout()
+        horiz_top.addWidget(lab_title)
+
+        # horiz_top.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
+
+        vertical_all = QtGui.QVBoxLayout()
+        # vertical_all.addStretch(1)
+        vertical_all.addLayout(horiz_top, 0)
+        # vertical_all.addStretch(2)
+        vertical_all.addLayout(horizontal, 1)
+        # vertical_all.addStretch(1)
+        spacer = QtGui.QSpacerItem(0, 80)
+        vertical_all.addSpacerItem(spacer)
+
+        self.setLayout(vertical_all)
+        self.setStyleSheet('QLabel#lab_title, #lab_sex, #lab_drink, #lab_weight, #lab_amount, #lab_alc_cont,'
+                           '#lab_fullness, #lab_result, #lab_concentration'
+                           ' {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
                            'QRadioButton {color: white; font-size: 20px}'
-                           'QPushButton#button_new {font-size: 20px; font-family: Proggy; border: 2px;'
+                           'QPushButton#calculate, #write {font-size: 20px; font-family: Proggy; border: 2px;'
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
-                           'QPushButton#button_new:hover {background-color: #87cefa}')
+                           'QPushButton#calculate:hover {background-color: #87cefa}')
 
-# Коэффициент редукции
+    # Коэффициент редукции
 
     def reduction_ratio(self, value):
         self.sex = value
 
-# Дефицит резорбции
+    # Отслеживание ввода
+
+    def invalid_input(self):
+        if (len(self.weight.text()) == 0 or
+                len(self.amount.text()) == 0 or
+                len(self.alc_cont.text()) == 0 or
+                ((self.radio_man.isChecked() is False) and (self.radio_woman.isChecked() is False)) or
+                ((self.full.isChecked() is False) and (self.less.isChecked() is False))):
+            self.warning('ВСЕ ПЛОХО')
+        else:
+            if (int(self.weight.text()) > 150) or (int(self.weight.text()) < 40):
+                self.warning('Масса должна лежать\nв пределах от 40 до 150 кг')
+            elif (int(self.amount.text()) > 5000) or (int(self.amount.text()) < 10):
+                self.warning('Количество выпитого должно лежать\nв пределах от 10 до 5000 мл')
+            else:
+                self.calculation()
+
+
+    # Получение даты
+    @staticmethod
+    def get_data(self):
+        d = datetime.date.today()
+        if len(str(d.month)) == 1:
+            a = '0' + str(d.month)
+        else:
+            a = str(d.month)
+        # print(str(d.day) + '.' + a + '.' + str(d.year))
+
+    # Дефицит резорбции
 
     def resorption_def(self, value):
         self.deficiency = value
 
-# Расчет
+    # Расчет
 
     def calculation(self):
         denominator = round(self.sex * int(self.weight.text()))
@@ -118,7 +207,7 @@ class Calculator(Common):
         deficiency = pure_alcohol / self.deficiency
         numerator = pure_alcohol - deficiency
         concentration = round(numerator / denominator, 2)
-        return concentration
+        self.lab_concentration.setText(str(concentration))
 
 
 if __name__ == "__main__":

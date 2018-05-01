@@ -102,8 +102,8 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.frame_full.setFrameShape(6)
         self.frame_full.setLayout(grid)
-        self.frame_full.setMaximumSize(450,250)
-        self.fr_empty.setMaximumSize(450,250)
+        self.frame_full.setMaximumSize(450, 250)
+        self.fr_empty.setMaximumSize(450, 250)
         self.layout_2.addWidget(self.lab_quote)
         self.layout_2.setStretch(0,1)
         self.layout_2.addWidget(self.frame_full)
