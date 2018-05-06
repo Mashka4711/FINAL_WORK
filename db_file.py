@@ -93,10 +93,27 @@ def new_emp_note(name, surname, patr, age, post, education, right, login, passwo
     conn.commit()
 
 
-# Загрузка записи из базы - из таблицы сотрудников
+# Редактирование записи сотрудника
 
 
-def load_emp_note():
+def edit_emp_note(id, name, surname, patr, age, post, education, right, login, password, photo):
+    conn = getConnection()
+    note_query = "UPDATE employees SET emp_surname = '%s', emp_name = '%s', emp_patronimyc = '%s', emp_post = '%s', " \
+                 "emp_rights = '%s', emp_age = '%s', emp_education = '%s', emp_login = '%s', emp_password = '%s', emp_photo = '%s' " \
+                 "WHERE id_emp = '%s'" % (surname, name, patr, post, right, age, education, login, password, photo, id)
+    print(note_query)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    # conn.commit()
+
+
+# Загрузка записей из базы - из таблицы сотрудников
+
+
+def load_emp_notes():
     conn = getConnection()
     notes_query = "SELECT * FROM employees"
     curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
@@ -117,12 +134,39 @@ def load_emp_note():
     return entries
 
 
+# Загрузка ОДНОЙ записи из базы - из таблицы сотрудников
+
+
+def load_emp_note(note_id):
+    conn = getConnection()
+    notes_query = "SELECT * FROM employees WHERE id_emp = '%s'" % note_id
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    entries = []
+    for note in notes:
+        # str_id = note['id_emp']
+        str_name = note['emp_name']
+        str_surname = note['emp_surname']
+        str_patr = note['emp_patronimyc']
+        str_age = note['emp_age']
+        str_education = note['emp_education']
+        str_post = note['emp_post']
+        str_rights = note['emp_rights']
+        str_login = note['emp_login']
+        str_pass = note['emp_password']
+        str_photo = note['emp_photo']
+        # entries.append( [str_name, str_surname, str_patr, str_age, str_education, str_post, str_rights, str_login, str_pass, str_photo] )
+        entries = [str_name, str_surname, str_patr, str_age, str_education, str_post, str_rights, str_login, str_pass, str_photo]
+    return entries
+
+
 # Удаление записи из таблицы сотрудников
 
 
 def del_emp(id_employee):
     conn = getConnection()
-    del_query = "DELETE FROM employees WHERE id_emp='%s'" % id_employee
+    del_query = "DELETE FROM employees WHERE id_emp = '%s'" % id_employee
     curs_del = conn.cursor(MySQLdb.cursors.DictCursor)
     curs_del.execute(del_query)
     conn.commit()
@@ -157,3 +201,6 @@ def load_description(word):
     for note in notes:
         str_word = note['description']
     return str_word
+
+
+# edit_emp_note(0,0,0,0,0,0,0,0,0,0,0)

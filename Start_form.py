@@ -155,7 +155,7 @@ class MainWind(QtGui.QMainWindow, Common):
 # Открытие окна добавления нового сотрудника
 
     def open_new_emp(self):
-        win = Wind(self)
+        win = Wind(0, -1)
         win.show()
 
 # Открытие окна со списком сотрудников

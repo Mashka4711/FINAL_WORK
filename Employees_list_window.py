@@ -1,5 +1,6 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
+from New_Employee import Wind
 import db_file
 
 
@@ -15,6 +16,7 @@ class EmployeesListWindow(Common):
         self.employees_list.setMinimumHeight(0.65 * window_size.height())
 
         self.button_del = QtGui.QPushButton('   Удалить   ')
+        self.button_edit = QtGui.QPushButton('   Изменить   ')
 
         self.contain()
 
@@ -29,9 +31,12 @@ class EmployeesListWindow(Common):
 
         self.button_del.clicked.connect(self.delete_emp)
         self.button_del.setObjectName('button_del')
+        self.button_edit.clicked.connect(self.edit_emp)
+        self.button_edit.setObjectName('button_edit')
 
         layout_button = QtGui.QHBoxLayout()
         layout_button.addStretch(1)
+        layout_button.addWidget(self.button_edit)
         layout_button.addWidget(self.button_del)
         layout_button.addStretch(1)
 
@@ -50,15 +55,16 @@ class EmployeesListWindow(Common):
                            ' {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
                            'QComboBox {font-size: 20px}'
-                           'QPushButton#button_del {font-size: 20px; font-family: Proggy; border: 2px;'
+                           'QPushButton#button_edit, #button_del {font-size: 20px; font-family: Proggy; border: 2px;'
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
+                           'QPushButton#button_edit:hover {background-color: #87cefa}'
                            'QPushButton#button_del:hover {background-color: #87cefa}')
 
 # Получение записей для списка сотрудников из БД
 
     def get_data_from_db(self):
         db_file.getConnection()
-        entries = db_file.load_emp_note()
+        entries = db_file.load_emp_notes()
         for entry in entries:
             self.make_item(entry)
 
@@ -97,8 +103,10 @@ class EmployeesListWindow(Common):
 
         item = QtGui.QListWidgetItem(self.employees_list)
         item.setBackgroundColor(QtGui.QColor("#bed2f7"))
+        item.setForeground(QtGui.QBrush(QtGui.QColor("#bed2f7")))
         item.setSizeHint(local_widget.sizeHint())
         item.setText(str(entry[0]))
+
         self.employees_list.setItemWidget(item, local_widget)
 
 # Сообщение о подтверждении действия
@@ -118,6 +126,15 @@ class EmployeesListWindow(Common):
                 # print(self.employees_list.currentItem().text())
                 note_id = self.employees_list.currentItem().text()
                 db_file.del_emp(note_id)
+
+# Обработка кнопки редактирования
+
+    def edit_emp(self):
+        if self.employees_list.currentItem().isSelected():
+            # print(self.employees_list.currentItem().text())
+            note_id = self.employees_list.currentItem().text()
+            win = Wind(1, note_id)
+            win.show()
 
 
 if __name__ == "__main__":

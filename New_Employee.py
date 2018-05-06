@@ -4,7 +4,7 @@ import db_file
 
 
 class Wind(Common):
-    def __init__(self, parent=None):
+    def __init__(self, mode, note_id, parent=None):
         super(Wind, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint)
         self.setWindowModality(QtCore.Qt.WindowModal)
@@ -20,14 +20,17 @@ class Wind(Common):
         self.rw_pass_new = QtGui.QLineEdit()
         self.rw_photo = QtGui.QLineEdit()
         self.button_new = QtGui.QPushButton('   Добавить   ')
+        # self.button_edit = QtGui.QPushButton('   Изменить   ')
+        # if mode == 0:
+        #     self.button_new.setText('   Добавить   ')
+        if mode == 1:
+            self.button_new.setText('   Изменить   ')
 
-        self.contain()
-
-        self.rw_right.addItems(["min", "max"])
+        self.contain(mode, note_id)
 
 # Содержимое формы сохранения нового сотрудника
 
-    def contain(self):
+    def contain(self, mode, note_id):
         lab_name = QtGui.QLabel(' *  Имя:  ')
         lab_name.setObjectName('lab_name')
         lab_surname = QtGui.QLabel(' *  Фамилия:  ')
@@ -48,6 +51,8 @@ class Wind(Common):
         lab_pass_new.setObjectName('lab_pass_new')
         lab_photo = QtGui.QLabel('     Фото:  ')
         lab_photo.setObjectName('lab_photo')
+
+        self.rw_right.addItems(["min", "max"])
 
         grid_left = QtGui.QGridLayout()
         grid_left.setSpacing(10)
@@ -91,7 +96,7 @@ class Wind(Common):
                                    '\nПоля, отмеченные * , обязательны к заполнению!'
                                    '\nДля добавления фото введите путь к нему: /icons...')
         lab_heading.setObjectName('lab_heading')
-        self.button_new.clicked.connect(self.save_new_emp)
+        self.button_new.clicked.connect(lambda: self.save_new_emp(mode, note_id))
         self.button_new.setObjectName('button_new')
 
         layout_button = QtGui.QHBoxLayout()
@@ -112,6 +117,9 @@ class Wind(Common):
         layout_vertical.addLayout(layout_button)
         layout_vertical.addStretch(1)
 
+        if mode == 1:
+            self.fill_edit_lines(note_id)
+
         self.setLayout(layout_vertical)
         self.setStyleSheet('QLabel#lab_name, #lab_surname, #lab_patr, #lab_age, #lab_post, #lab_education,'
                            '#lab_right, #lab_login_new, #lab_pass_new, #lab_heading, #lab_photo'
@@ -122,9 +130,31 @@ class Wind(Common):
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
                            'QPushButton#button_new:hover {background-color: #87cefa}')
 
+# Заполнение полей
+
+    def fill_edit_lines(self, note_id):
+        entry = db_file.load_emp_note(note_id)
+        # print(entry)
+        self.rw_name.setText(entry[0])
+        self.rw_surname.setText(entry[1])
+        self.rw_patr.setText(entry[2])
+        self.rw_age.setText(entry[3])
+        self.rw_education.setText(entry[4])
+        self.rw_post.setText(entry[5])
+        # self.rw_right.setText(entry[6])
+        self.rw_login_new.setText(entry[7])
+        self.rw_login_new.setEnabled(False)
+        self.rw_pass_new.setText(entry[8])
+        self.rw_pass_new.setEnabled(False)
+        self.rw_photo.setText(entry[9])
+
+        # отдельно комбо-бокс:
+        if entry[6] == "max":
+            self.rw_right.setCurrentIndex(1)
+
 # Обработка кнопки сохранения
 
-    def save_new_emp(self):
+    def save_new_emp(self, mode, note_id):
         if (len(self.rw_name.text()) == 0 or
                 len(self.rw_surname.text()) == 0 or
                 len(self.rw_post.text()) == 0 or
@@ -135,20 +165,27 @@ class Wind(Common):
 
         else:
             db_file.getConnection()
-            login_comp = db_file.login_comparison(self.rw_login_new.text())
-            pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
-            if login_comp:
-                self.warning("Логин уже существует!\nВведите другой!")
-            if pass_comp:
-                self.warning("Пароль уже существует!\nВведите другой!")
-            db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(), self.rw_age.text(),
-                                 self.rw_post.text(), self.rw_education.text(), self.rw_right.currentText(),
-                                 self.rw_login_new.text(), self.rw_pass_new.text(), self.rw_photo.text())
+            if mode == 0:
+                login_comp = db_file.login_comparison(self.rw_login_new.text())
+                pass_comp = db_file.pass_comparison(self.rw_pass_new.text())
+                if login_comp:
+                    self.warning("Логин уже существует!\nВведите другой!")
+                if pass_comp:
+                    self.warning("Пароль уже существует!\nВведите другой!")
+                db_file.new_emp_note(self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(),
+                                     self.rw_age.text(), self.rw_post.text(), self.rw_education.text(),
+                                     self.rw_right.currentText(), self.rw_login_new.text(), self.rw_pass_new.text(),
+                                     self.rw_photo.text())
+            if mode == 1:
+                db_file.edit_emp_note(note_id, self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(),
+                                      self.rw_age.text(), self.rw_post.text(), self.rw_education.text(),
+                                      self.rw_right.currentText(), self.rw_login_new.text(), self.rw_pass_new.text(),
+                                      self.rw_photo.text())
 
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    window_main = Wind()
+    window_main = Wind(1, -1)
     window_main.show()
     sys.exit(app.exec_())
