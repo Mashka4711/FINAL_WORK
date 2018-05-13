@@ -20,8 +20,7 @@ class EmployeesListWindow(Common):
 
         self.contain()
 
-
-# Содержимое формы для отоборажения списка сотрудников
+    # Содержимое формы для отоборажения списка сотрудников
 
     def contain(self):
         lab_intro = QtGui.QLabel('Список сотрудников лаборатории:')
@@ -60,7 +59,7 @@ class EmployeesListWindow(Common):
                            'QPushButton#button_edit:hover {background-color: #87cefa}'
                            'QPushButton#button_del:hover {background-color: #87cefa}')
 
-# Получение записей для списка сотрудников из БД
+    # Получение записей для списка сотрудников из БД
 
     def get_data_from_db(self):
         db_file.getConnection()
@@ -68,12 +67,13 @@ class EmployeesListWindow(Common):
         for entry in entries:
             self.make_item(entry)
 
-# Создание виджета - элемента списка
+    # Создание виджета - элемента списка
 
     def make_item(self, entry):
         label_pic = QtGui.QLabel()
         label_pic.setMaximumSize(100, 90)
-        if entry[8] is None:
+        # if entry[8] is None:
+        if (entry[8] == '') or (entry[8] is None):
             entry[8] = 'icons/unknown.png'
         label_pic.setPixmap(QtGui.QPixmap(entry[8]))
         label_name = QtGui.QLabel(entry[1])
@@ -109,7 +109,7 @@ class EmployeesListWindow(Common):
 
         self.employees_list.setItemWidget(item, local_widget)
 
-# Сообщение о подтверждении действия
+    # Сообщение о подтверждении действия
 
     def question(self):
         answer = QtGui.QMessageBox.question(self, 'Сообщение', "Вы точно хотите удалить сотрудника?",
@@ -117,21 +117,20 @@ class EmployeesListWindow(Common):
         if answer == QtGui.QMessageBox.Yes:
             return True
 
-# Обработка кнопки удаления
+    # Обработка кнопки удаления
 
     def delete_emp(self):
+        db_file.getConnection()
         if self.employees_list.currentItem().isSelected():
             answer = self.question()
             if answer:
-                # print(self.employees_list.currentItem().text())
                 note_id = self.employees_list.currentItem().text()
                 db_file.del_emp(note_id)
 
-# Обработка кнопки редактирования
+    # Обработка кнопки редактирования
 
     def edit_emp(self):
         if self.employees_list.currentItem().isSelected():
-            # print(self.employees_list.currentItem().text())
             note_id = self.employees_list.currentItem().text()
             win = Wind(1, note_id)
             win.show()

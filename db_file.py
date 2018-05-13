@@ -3,7 +3,7 @@ import MySQLdb
 
 def getConnection():
     conn = MySQLdb.connect(host="localhost", user="root",
-                           passwd="root", db="database_1", charset="utf8")
+                           passwd="root", db="database_2", charset="utf8")
     return conn
 '''try:
     conn = MySQLdb.connect(host="localhost", user="root",
@@ -22,15 +22,26 @@ def entering(login, password):
     cur1.execute(authorize_query)
     data = cur1.fetchall()
     if len(data) == 0:
-        return False
+        # return False
+        return -1
     else:
         password_bd = {}
         for item in data:
             password_bd = dict(item)
         if password == password_bd['emp_password']:
-            return True
+            # return True
+            id_query = "SELECT id_emp FROM employees WHERE emp_login='%s'" % login
+            cur2 = conn.cursor(MySQLdb.cursors.DictCursor)
+            cur2.execute(id_query)
+            id_emp_dict = cur2.fetchall()
+            id_emp_db = {}
+            for item in id_emp_dict:
+                id_emp_db = dict(item)
+            # print(id_emp_db['id_emp'])
+            return id_emp_db['id_emp']
         else:
-            return False
+            # return False
+            return -1
 
 # Проверка прав
 
@@ -92,7 +103,6 @@ def new_emp_note(name, surname, patr, age, post, education, right, login, passwo
         print("Error: {}".format(err))
     conn.commit()
 
-
 # Редактирование записи сотрудника
 
 
@@ -107,8 +117,7 @@ def edit_emp_note(id, name, surname, patr, age, post, education, right, login, p
         curs_note.execute(note_query)
     except MySQLdb.IntegrityError as err:
         print("Error: {}".format(err))
-    # conn.commit()
-
+    conn.commit()
 
 # Загрузка записей из базы - из таблицы сотрудников
 
@@ -132,7 +141,6 @@ def load_emp_notes():
         str_photo = note['emp_photo']
         entries.append( [str_id, str_name, str_age, str_education, str_post, str_rights, str_login, str_pass, str_photo] )
     return entries
-
 
 # Загрузка ОДНОЙ записи из базы - из таблицы сотрудников
 
@@ -160,7 +168,6 @@ def load_emp_note(note_id):
         entries = [str_name, str_surname, str_patr, str_age, str_education, str_post, str_rights, str_login, str_pass, str_photo]
     return entries
 
-
 # Удаление записи из таблицы сотрудников
 
 
@@ -170,7 +177,6 @@ def del_emp(id_employee):
     curs_del = conn.cursor(MySQLdb.cursors.DictCursor)
     curs_del.execute(del_query)
     conn.commit()
-
 
 # Загрузка справочника
 
@@ -187,8 +193,7 @@ def load_directory(word_part):
         words.append(str_word)
     return words
 
-
-# загрузка описания для выбранного слова из справочника
+# Загрузка описания для выбранного слова из справочника
 
 
 def load_description(word):
@@ -202,5 +207,50 @@ def load_description(word):
         str_word = note['description']
     return str_word
 
+# Запись параметров алкогольной экспертизы в базу
 
-# edit_emp_note(0,0,0,0,0,0,0,0,0,0,0)
+
+def save_alcohol_calculation(calc_date, sex, weight, alc_cont, amount, fullness, res_concentration, result,
+                             dossier_no_dossier, employees_id_emp):
+    conn = getConnection()
+    note_query = "INSERT INTO expertise_calc (calc_date, sex, weight, alc_cont, amount, fullness, res_concentration, " \
+                 "result, dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s', '%s', '%s')" % (calc_date, sex, weight, alc_cont, amount, fullness,
+                                                     res_concentration, result, dossier_no_dossier, employees_id_emp)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+
+# Загрузка списка фамилий и номеров дел для алкогольной эскпертизы
+
+
+def load_dossier_to_alcohol_combobox():
+    conn = getConnection()
+    notes_query = "SELECT * FROM dossier"
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    entries = []
+    for note in notes:
+        str_id = str(note['no_dossier'])
+        str_name = note['m_name'] + " " + note['surname']
+        entries.append(str_id + "# " + str_name)
+    return entries
+
+# Запись в базу нового дела
+
+
+def new_dossier(man_name, man_surname, man_birthday):
+    conn = getConnection()
+    note_query = "INSERT INTO dossier (m_name, surname, birthday) VALUES ('%s', '%s', '%s')" % (man_name, man_surname,
+                                                                                                man_birthday)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+

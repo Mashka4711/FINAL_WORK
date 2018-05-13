@@ -20,15 +20,13 @@ class Wind(Common):
         self.rw_pass_new = QtGui.QLineEdit()
         self.rw_photo = QtGui.QLineEdit()
         self.button_new = QtGui.QPushButton('   Добавить   ')
-        # self.button_edit = QtGui.QPushButton('   Изменить   ')
-        # if mode == 0:
-        #     self.button_new.setText('   Добавить   ')
+
         if mode == 1:
             self.button_new.setText('   Изменить   ')
 
         self.contain(mode, note_id)
 
-# Содержимое формы сохранения нового сотрудника
+    # Содержимое формы сохранения нового сотрудника
 
     def contain(self, mode, note_id):
         lab_name = QtGui.QLabel(' *  Имя:  ')
@@ -130,7 +128,7 @@ class Wind(Common):
                            'border-radius: 6px; background-color: white; min-height: 30px;}'
                            'QPushButton#button_new:hover {background-color: #87cefa}')
 
-# Заполнение полей
+    # Заполнение полей при изменении
 
     def fill_edit_lines(self, note_id):
         entry = db_file.load_emp_note(note_id)
@@ -141,7 +139,6 @@ class Wind(Common):
         self.rw_age.setText(entry[3])
         self.rw_education.setText(entry[4])
         self.rw_post.setText(entry[5])
-        # self.rw_right.setText(entry[6])
         self.rw_login_new.setText(entry[7])
         self.rw_login_new.setEnabled(False)
         self.rw_pass_new.setText(entry[8])
@@ -152,7 +149,7 @@ class Wind(Common):
         if entry[6] == "max":
             self.rw_right.setCurrentIndex(1)
 
-# Обработка кнопки сохранения
+    # Обработка кнопки сохранения
 
     def save_new_emp(self, mode, note_id):
         if (len(self.rw_name.text()) == 0 or
@@ -176,16 +173,18 @@ class Wind(Common):
                                      self.rw_age.text(), self.rw_post.text(), self.rw_education.text(),
                                      self.rw_right.currentText(), self.rw_login_new.text(), self.rw_pass_new.text(),
                                      self.rw_photo.text())
+                self.inform('Сотрудник добавлен!')
             if mode == 1:
                 db_file.edit_emp_note(note_id, self.rw_name.text(), self.rw_surname.text(), self.rw_patr.text(),
                                       self.rw_age.text(), self.rw_post.text(), self.rw_education.text(),
                                       self.rw_right.currentText(), self.rw_login_new.text(), self.rw_pass_new.text(),
                                       self.rw_photo.text())
+                self.inform('Данные успешно изменены!')
 
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    window_main = Wind(1, -1)
+    window_main = Wind(0, -1)
     window_main.show()
     sys.exit(app.exec_())

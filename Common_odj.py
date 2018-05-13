@@ -38,3 +38,13 @@ class Common(QtGui.QWidget):
         message.setText(text)
         message.setStandardButtons(QtGui.QMessageBox.Ok)
         message.show()
+
+    # Информирование
+
+    def inform(self, text):
+        message = QtGui.QMessageBox(self)
+        message.setIcon(QtGui.QMessageBox.Information)
+        message.setWindowTitle("Информация")
+        message.setText(text)
+        message.setStandardButtons(QtGui.QMessageBox.Ok)
+        message.show()

@@ -6,11 +6,16 @@ from Layouts import lay_window1
 from New_Employee import Wind
 from Employees_list_window import EmployeesListWindow
 from Common_odj import Common
+from Directory import TermList
+from Alcohol_calculator import Calculator
 
 
 class MainWind(QtGui.QMainWindow, Common):
     def __init__(self, parent=None):
         super(MainWind, self).__init__(parent)
+
+        self.current_emp_id = int
+
         self.menu_bar = self.menuBar()
         self.file = self.menu_bar.addMenu('&Меню')
         self.layout = QtGui.QVBoxLayout()
@@ -36,11 +41,13 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.new_worker = QtGui.QAction(QtGui.QIcon('png/QampatykB (36).png'), 'Добавить сотрудника', self)
         self.workers_list = QtGui.QAction(QtGui.QIcon('png/QampatykB (37).png'), 'Список сотрудников', self)
+        self.show_directory = QtGui.QAction(QtGui.QIcon('png/QampatykB (48).png'), 'Справочник', self)
+        self.open_alcohol_calc = QtGui.QAction(QtGui.QIcon('png/QampatykB (48).png'), 'Экспертиза алко', self)
 
         self.menu()
         self.start_contain()
 
-# Стартовое заполнение
+    # Стартовое заполнение
 
     def start_contain(self):
         wnd = QtGui.QWidget(self)
@@ -66,14 +73,14 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.button_legend.clicked.connect(self.show_on)
 
-# Открытие формы авторизации
+    # Открытие формы авторизации
 
     def show_on(self):
         self.button_legend.hide()
         self.vlay_start.deleteLater()
         self.contain()
 
-# Содержимое формы авторизации
+    # Содержимое формы авторизации
 
     def contain(self):
         self.file.setEnabled(True)
@@ -122,20 +129,20 @@ class MainWind(QtGui.QMainWindow, Common):
                           'border-radius: 6px; background-color: white; min-height: 30px;}'
                           'QPushButton:hover {background-color: #87cefa}')
 
-
-# Центровка
+    # Центровка
 
     def center(self):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
-# Открытие основного окна
+    # Открытие основного окна
 
     def on_show(self):
-        db_file.getConnection()  # проверить,работает ли без этой строчки !!!!!!!!!!!!!!
+        db_file.getConnection()
         entry_condition = db_file.entering(self.rw_login.text(), self.rw_pass.text())
-        if entry_condition:
+        if entry_condition > 0:
+            self.current_emp_id = entry_condition
             right = db_file.rights_check(self.rw_login.text())
             if right:
                 self.new_worker.setEnabled(True)
@@ -152,16 +159,28 @@ class MainWind(QtGui.QMainWindow, Common):
             self.warning("Неверный логин или пароль!"
                          "\nПовторите ввод!")
 
-# Открытие окна добавления нового сотрудника
+    # Открытие окна добавления нового сотрудника
 
     def open_new_emp(self):
         win = Wind(0, -1)
         win.show()
 
-# Открытие окна со списком сотрудников
+    # Открытие окна со списком сотрудников
 
     def open_emp_list(self):
         win = EmployeesListWindow(self)
+        win.show()
+
+    # Открытие справочника
+
+    def open_directory(self):
+        win = TermList(self)
+        win.show()
+
+    # Открытие экспертизы 1
+
+    def open_alcohol_calculator(self):
+        win = Calculator(self.current_emp_id)
         win.show()
 
 # Описание меню
@@ -176,6 +195,8 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.connect(self.new_worker, QtCore.SIGNAL('triggered()'), self.open_new_emp)
         self.connect(self.workers_list, QtCore.SIGNAL('triggered()'), self.open_emp_list)
+        self.connect(self.show_directory, QtCore.SIGNAL('triggered()'), self.open_directory)
+        self.connect(self.open_alcohol_calc, QtCore.SIGNAL('triggered()'), self.open_alcohol_calculator)
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
@@ -183,6 +204,8 @@ class MainWind(QtGui.QMainWindow, Common):
 
         self.file.addAction(self.new_worker)
         self.file.addAction(self.workers_list)
+        self.file.addAction(self.show_directory)
+        self.file.addAction(self.open_alcohol_calc)
         self.file.addAction(ext)
 
 
@@ -191,4 +214,5 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window_main = MainWind()
     window_main.show()
+    # window_main.open_alcohol_calculator()
     sys.exit(app.exec_())
