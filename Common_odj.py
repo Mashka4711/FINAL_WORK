@@ -1,4 +1,5 @@
 from PyQt4 import QtCore, QtGui
+import datetime
 
 
 class Common(QtGui.QWidget):
@@ -48,3 +49,16 @@ class Common(QtGui.QWidget):
         message.setText(text)
         message.setStandardButtons(QtGui.QMessageBox.Ok)
         message.show()
+
+    # Получение даты
+
+    @staticmethod
+    def get_data(self):
+        d = datetime.date.today()
+        if len(str(d.month)) == 1:
+            a = '0' + str(d.month)
+            # a = str(d.month)
+        else:
+            a = str(d.month)
+        # print(str(d.day) + '.' + a + '.' + str(d.year))
+        return str(d.year) + '.' + a + '.' + str(d.day)

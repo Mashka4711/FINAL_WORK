@@ -35,7 +35,7 @@ class Calculator(Common):
 
         self.contain()
 
-# Содержимое формы калькулятора
+    # Содержимое формы калькулятора
 
     def contain(self):
         lab_title = QtGui.QLabel('Расчет максимальной концентрации алкоголя в крови человека в промилле (‰)')
@@ -208,7 +208,7 @@ class Calculator(Common):
                 len(self.alc_cont.text()) == 0 or
                 ((self.radio_man.isChecked() is False) and (self.radio_woman.isChecked() is False)) or
                 ((self.full.isChecked() is False) and (self.less.isChecked() is False))):
-            self.warning('ВСЕ ПЛОХО')
+            self.warning('Заполните все поля!')
         else:
             if (int(self.weight.text()) > 150) or (int(self.weight.text()) < 40):
                 self.warning('Масса должна лежать\nв пределах от 40 до 150 кг')
@@ -218,25 +218,12 @@ class Calculator(Common):
                 self.calculation()
                 self.write.setEnabled(True)
 
-    # Получение даты
-
-    @staticmethod
-    def get_data(self):
-        d = datetime.date.today()
-        if len(str(d.month)) == 1:
-            a = '0' + str(d.month)
-            # a = str(d.month)
-        else:
-            a = str(d.month)
-        # print(str(d.day) + '.' + a + '.' + str(d.year))
-        return str(d.year) + '.' + a + '.' + str(d.day)
-
     # Дефицит резорбции
 
     def resorption_def(self, value):
         self.deficiency = value
 
-    # Расчет
+    # Рассчет
 
     def calculation(self):
         denominator = round(self.sex * float(self.weight.text()))
@@ -287,3 +274,4 @@ if __name__ == "__main__":
     window_main = Calculator(2)
     window_main.show()
     sys.exit(app.exec_())
+

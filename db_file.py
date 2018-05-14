@@ -224,7 +224,7 @@ def save_alcohol_calculation(calc_date, sex, weight, alc_cont, amount, fullness,
         print("Error: {}".format(err))
     conn.commit()
 
-# Загрузка списка фамилий и номеров дел для алкогольной эскпертизы
+# Загрузка списка фамилий и номеров дел для любой эскпертизы
 
 
 def load_dossier_to_alcohol_combobox():
@@ -254,3 +254,20 @@ def new_dossier(man_name, man_surname, man_birthday):
         print("Error: {}".format(err))
     conn.commit()
 
+# Запись параметров экспертизы удара головой в базу
+
+
+def save_dip_plane_calculation(calc_date, weight, height, rigidity, dossier_no_dossier, employees_id_emp, res_power,
+                               result):
+    conn = getConnection()
+    note_query = "INSERT INTO dip_plane_calc (calc_date, weight, height, rigidity, res_power, result," \
+                 " dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s')" % (calc_date, weight, height, rigidity, res_power, result, dossier_no_dossier,
+                                         employees_id_emp)
+    print(note_query)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
