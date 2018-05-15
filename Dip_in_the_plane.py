@@ -1,6 +1,5 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
-import datetime
 import db_file
 from New_dossier import NewDossier
 import cmath
@@ -175,7 +174,7 @@ class DipPlane(Common):
         self.surface = value
         self.rigidity = text
 
-    # Рассчет
+    # Расчет
 
     def calculation(self):
         first = round(self.surface * float(self.rw_weight.text()))
@@ -216,6 +215,7 @@ class DipPlane(Common):
         dossier_num = parse_str[0]
         db_file.save_dip_plane_calculation(self.get_data(self), self.rw_weight.text(), self.rw_height.text(),
                                            self.surface, dossier_num, id_emp, self.power, self.lab_result_text.text())
+        self.inform('Данные сохранены!')
 
     # Открытие окна создания нового дела
 

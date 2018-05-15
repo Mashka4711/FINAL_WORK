@@ -12,7 +12,7 @@ class Common(QtGui.QWidget):
         self.center()
         self.fond()
 
-# Смещение окна относительно главного для эффекта каскадного расположения окон
+    # Смещение окна относительно главного для эффекта каскадного расположения окон
 
     def center(self):
         offset = 25
@@ -20,7 +20,7 @@ class Common(QtGui.QWidget):
         size = self.geometry()
         self.move((screen.width() - size.width()) / 2 + offset, (screen.height() - size.height()) / 2 + offset)
 
-# Фон
+    # Фон
 
     def fond(self):
         back = self.palette()
@@ -30,7 +30,7 @@ class Common(QtGui.QWidget):
                       QtGui.QBrush(QtGui.QPixmap('icons/ubuntism_ru_abstract_35.png')))
         self.setPalette(back)
 
-# Предупреждение
+    # Предупреждение
 
     def warning(self, text):
         message = QtGui.QMessageBox(self)

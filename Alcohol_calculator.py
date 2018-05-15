@@ -1,6 +1,5 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
-import datetime
 import db_file
 from New_dossier import NewDossier
 
@@ -223,7 +222,7 @@ class Calculator(Common):
     def resorption_def(self, value):
         self.deficiency = value
 
-    # Рассчет
+    # Расчет
 
     def calculation(self):
         denominator = round(self.sex * float(self.weight.text()))
@@ -260,6 +259,7 @@ class Calculator(Common):
         db_file.save_alcohol_calculation(self.get_data(self), str(self.sex), self.weight.text(), self.alc_cont.text(),
                                          self.amount.text(), str(self.deficiency), str(self.concentration),
                                          self.lab_rate.text(), dossier_num, id_emp)
+        self.inform('Данные сохранены!')
 
     # Открытие окна создания нового дела
 
