@@ -296,10 +296,45 @@ def save_body_weight_determination(calc_date, height, thorax, leg, breech, sex, 
                  "dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
                  " '%s', '%s', '%s', '%s')" % (calc_date, height, thorax, leg, breech, sex, res_weight,
                                                dossier_no_dossier, employees_id_emp)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+
+
+# Запись параметров экспертизы определения времени выведения алкоголя в базу
+
+
+def save_alcohol_excretion(calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier, employees_id_emp):
+    conn = getConnection()
+    note_query = "INSERT INTO alcohol_excretion (calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier," \
+                 "employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (calc_date, weight, amount,
+                                                                                          alc_cont, res_time,
+                                                                                          dossier_no_dossier,
+                                                                                          employees_id_emp)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+
+# Запись параметров экспертизы определения биологического возраста базу
+
+
+def save_bio_age(calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier, employees_id_emp):
+    conn = getConnection()
+    note_query = "INSERT INTO bio_age_kidneys (calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier," \
+                 "employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (calc_date, glomeruli,
+                                                                                          arteries, stroma, res_age,
+                                                                                          dossier_no_dossier,
+                                                                                          employees_id_emp)
     print(note_query)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
     except MySQLdb.IntegrityError as err:
         print("Error: {}".format(err))
-    # conn.commit()
+    conn.commit()
