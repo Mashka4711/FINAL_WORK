@@ -178,6 +178,7 @@ def del_emp(id_employee):
     curs_del.execute(del_query)
     conn.commit()
 
+
 # Загрузка справочника
 
 
@@ -211,18 +212,19 @@ def load_description(word):
 
 
 def save_alcohol_calculation(calc_date, sex, weight, alc_cont, amount, fullness, res_concentration, result,
-                             dossier_no_dossier, employees_id_emp):
+                             dossier_no_dossier, employees_id_emp, category):
     conn = getConnection()
-    note_query = "INSERT INTO expertise_calc (calc_date, sex, weight, alc_cont, amount, fullness, res_concentration, " \
-                 "result, dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
-                 " '%s', '%s', '%s', '%s', '%s')" % (calc_date, sex, weight, alc_cont, amount, fullness,
-                                                     res_concentration, result, dossier_no_dossier, employees_id_emp)
+    note_query_1 = "INSERT INTO expertise_calc (calc_date, sex, weight, alc_cont, amount, fullness, res_concentration" \
+                   ", result, dossier_no_dossier, employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                   "'%s', '%s', '%s', '%s', '%s', '%s')" % (calc_date, sex, weight, alc_cont, amount, fullness,
+                                                            res_concentration, result, dossier_no_dossier,
+                                                            employees_id_emp, category)
     try:
-        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
-        curs_note.execute(note_query)
+        curs_note_1 = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note_1.execute(note_query_1)
+        conn.commit()
     except MySQLdb.IntegrityError as err:
         print("Error: {}".format(err))
-    conn.commit()
 
 # Загрузка списка фамилий и номеров дел для любой эскпертизы
 
@@ -267,9 +269,10 @@ def save_dip_plane_calculation(calc_date, weight, height, rigidity, dossier_no_d
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
+        conn.commit()
     except MySQLdb.IntegrityError as err:
         print("Error: {}".format(err))
-    conn.commit()
+
 
 # Запись параметров экспертизы ИМТ в базу
 

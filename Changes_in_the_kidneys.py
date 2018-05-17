@@ -111,11 +111,13 @@ class BioAgeKidneys(Common):
 
         vertical_all = QtGui.QVBoxLayout()
         spacer = QtGui.QSpacerItem(0, 40)
+        spacer_1 = QtGui.QSpacerItem(0, 40)
+        spacer_2 = QtGui.QSpacerItem(0, 40)
         vertical_all.addSpacerItem(spacer)
         vertical_all.addLayout(title_lay, 0)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_1)
         vertical_all.addLayout(horizontal, 1)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_2)
 
         self.setLayout(vertical_all)
         self.setStyleSheet('QLabel#lab_result, #lab_result_text, #lab_glomeruli, #lab_stroma, #lab_arteries,'

@@ -144,10 +144,11 @@ class BodyWeight(Common):
 
         vertical_all = QtGui.QVBoxLayout()
         spacer = QtGui.QSpacerItem(0, 40)
+        spacer_2 = QtGui.QSpacerItem(0, 40)
         spacer_1 = QtGui.QSpacerItem(0, 80)
         vertical_all.addSpacerItem(spacer)
         vertical_all.addLayout(title_lay, 0)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_2)
         vertical_all.addLayout(horizontal, 1)
         vertical_all.addSpacerItem(spacer_1)
 

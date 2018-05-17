@@ -112,11 +112,13 @@ class BMI(Common):
 
         vertical_all = QtGui.QVBoxLayout()
         spacer = QtGui.QSpacerItem(0, 30)
+        spacer_1 = QtGui.QSpacerItem(0, 30)
+        spacer_2 = QtGui.QSpacerItem(0, 30)
         vertical_all.addSpacerItem(spacer)
         vertical_all.addLayout(title_lay, 0)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_1)
         vertical_all.addLayout(horizontal, 1)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_2)
 
         self.setLayout(vertical_all)
         self.setStyleSheet('QLabel#lab_weight, #lab_height, #lab_result, #result_text,#result_bmi, #lab_dossier'

@@ -147,11 +147,13 @@ class DipPlane(Common):
 
         vertical_all = QtGui.QVBoxLayout()
         spacer = QtGui.QSpacerItem(0, 60)
+        spacer_1 = QtGui.QSpacerItem(0, 60)
+        spacer_2 = QtGui.QSpacerItem(0, 60)
         vertical_all.addSpacerItem(spacer)
         vertical_all.addLayout(horizontal_top, 0)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_1)
         vertical_all.addLayout(horizontal, 1)
-        vertical_all.addSpacerItem(spacer)
+        vertical_all.addSpacerItem(spacer_2)
 
         self.setLayout(vertical_all)
         self.setStyleSheet('QLabel#lab_weight, #lab_height, #lab_surface, #lab_note, #lab_result, #lab_result_text,'
@@ -175,7 +177,7 @@ class DipPlane(Common):
         self.rigidity = text
 
     # Расчет
-
+    #
     def calculation(self):
         first = round(self.surface * float(self.rw_weight.text()))
         second = cmath.sqrt(float(self.rw_height.text()))

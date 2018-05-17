@@ -24,6 +24,7 @@ class Calculator(Common):
         self.lab_concentration = QtGui.QLabel()
         self.lab_rate = QtGui.QLabel()
         self.concentration = float
+        self.category = 'Расчет концентрации алкоголя'
 
         self.calculate = QtGui.QPushButton('  Рассчитать  ')
         self.write = QtGui.QPushButton('  Записать в базу  ')
@@ -258,7 +259,7 @@ class Calculator(Common):
         # print("Номер дела: " + dossier_num)
         db_file.save_alcohol_calculation(self.get_data(self), str(self.sex), self.weight.text(), self.alc_cont.text(),
                                          self.amount.text(), str(self.deficiency), str(self.concentration),
-                                         self.lab_rate.text(), dossier_num, id_emp)
+                                         self.lab_rate.text(), dossier_num, id_emp, self.category)
         self.inform('Данные сохранены!')
 
     # Открытие окна создания нового дела
