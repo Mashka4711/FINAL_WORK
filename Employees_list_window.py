@@ -136,9 +136,9 @@ class EmployeesListWindow(Common):
             win.show()
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = EmployeesListWindow()
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = EmployeesListWindow()
+#     window_main.show()
+#     sys.exit(app.exec_())

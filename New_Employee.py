@@ -182,9 +182,9 @@ class Wind(Common):
                 self.inform('Данные успешно изменены!')
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = Wind(0, -1)
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = Wind(0, -1)
+#     window_main.show()
+#     sys.exit(app.exec_())

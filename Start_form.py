@@ -1,8 +1,9 @@
 from PyQt4 import QtCore, QtGui
 import sys
-from Main_form import ModalWind
+# from Main_form import ModalWind
 import db_file
-from Layouts import lay_window1
+# from Layouts import lay_window1
+from Main_form import main_window_contain, run_expertise
 from New_Employee import Wind
 from Employees_list_window import EmployeesListWindow
 from Common_odj import Common
@@ -42,7 +43,7 @@ class MainWind(QtGui.QMainWindow, Common):
         self.new_worker = QtGui.QAction(QtGui.QIcon('png/QampatykB (36).png'), 'Добавить сотрудника', self)
         self.workers_list = QtGui.QAction(QtGui.QIcon('png/QampatykB (37).png'), 'Список сотрудников', self)
         self.show_directory = QtGui.QAction(QtGui.QIcon('png/QampatykB (48).png'), 'Справочник', self)
-        self.open_alcohol_calc = QtGui.QAction(QtGui.QIcon('png/QampatykB (48).png'), 'Экспертиза алко', self)
+        # self.open_alcohol_calc = QtGui.QAction(QtGui.QIcon('png/QampatykB (48).png'), 'Экспертиза алко', self)
 
         self.menu()
         self.start_contain()
@@ -151,7 +152,8 @@ class MainWind(QtGui.QMainWindow, Common):
                 self.new_worker.setEnabled(False)
                 self.workers_list.setEnabled(False)
             self.layout_3.deleteLater()
-            lay_window1(self)
+            # lay_window1(self)
+            main_window_contain(self, self.current_emp_id)
             #win = ModalWind(self)
             # #win.show()
             #self.setCentralWidget(win)
@@ -196,7 +198,7 @@ class MainWind(QtGui.QMainWindow, Common):
         self.connect(self.new_worker, QtCore.SIGNAL('triggered()'), self.open_new_emp)
         self.connect(self.workers_list, QtCore.SIGNAL('triggered()'), self.open_emp_list)
         self.connect(self.show_directory, QtCore.SIGNAL('triggered()'), self.open_directory)
-        self.connect(self.open_alcohol_calc, QtCore.SIGNAL('triggered()'), self.open_alcohol_calculator)
+        # self.connect(self.open_alcohol_calc, QtCore.SIGNAL('triggered()'), self.open_alcohol_calculator)
 
         #daughter_1 = QtGui.QAction(u'Дочка 1', self)
         #self.connect(daughter_1, QtCore.SIGNAL('triggered()'), self.on_show)
@@ -205,7 +207,7 @@ class MainWind(QtGui.QMainWindow, Common):
         self.file.addAction(self.new_worker)
         self.file.addAction(self.workers_list)
         self.file.addAction(self.show_directory)
-        self.file.addAction(self.open_alcohol_calc)
+        # self.file.addAction(self.open_alcohol_calc)
         self.file.addAction(ext)
 
 
@@ -214,5 +216,7 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window_main = MainWind()
     window_main.show()
+    # main_window_contain(window_main, 2)
+    # window_main.show()
     # window_main.open_alcohol_calculator()
     sys.exit(app.exec_())

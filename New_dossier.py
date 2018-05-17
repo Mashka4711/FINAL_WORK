@@ -101,14 +101,15 @@ class NewDossier(Common):
             date_year = parse_date_str[0]
             if len(date_year) != 4 or len(self.rw_birthday.text()) != 10:
                 self.warning("Неправильно введена дата!\nВведите: гггг.мм.дд")
-            db_file.getConnection()
-            db_file.new_dossier(self.rw_name.text(), self.rw_surname.text(), self.rw_birthday.text())
-            self.inform('Дело успешно добавлено!')
+            else:
+                db_file.getConnection()
+                db_file.new_dossier(self.rw_name.text(), self.rw_surname.text(), self.rw_birthday.text())
+                self.inform('Дело успешно добавлено!')
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = NewDossier()
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = NewDossier()
+#     window_main.show()
+#     sys.exit(app.exec_())

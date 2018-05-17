@@ -233,9 +233,9 @@ class BodyWeight(Common):
         self.inform('Данные сохранены!')
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = BodyWeight(2)
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = BodyWeight(2)
+#     window_main.show()
+#     sys.exit(app.exec_())

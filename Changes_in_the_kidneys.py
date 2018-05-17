@@ -31,7 +31,7 @@ class BioAgeKidneys(Common):
     # Содержимое формы
 
     def contain(self):
-        lab_title = QtGui.QLabel('Расчет времени выведения алкоголя из организма')
+        lab_title = QtGui.QLabel('Расчет биологического возраста по состоянию структуры печени')
         lab_title.setObjectName('lab_title')
         lab_glomeruli = QtGui.QLabel('Удельный вес\nнеизмененных клубочков, %: ')
         lab_glomeruli.setObjectName('lab_glomeruli')
@@ -175,9 +175,9 @@ class BioAgeKidneys(Common):
         self.inform('Данные сохранены!')
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = BioAgeKidneys(2)
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = BioAgeKidneys(2)
+#     window_main.show()
+#     sys.exit(app.exec_())

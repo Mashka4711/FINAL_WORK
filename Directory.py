@@ -83,9 +83,9 @@ class TermList(Common):
         self.word_list_w.addItems(db_file.load_directory(self.rw_input.text()))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = TermList()
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = TermList()
+#     window_main.show()
+#     sys.exit(app.exec_())

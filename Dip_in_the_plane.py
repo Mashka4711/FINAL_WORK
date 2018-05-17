@@ -224,9 +224,9 @@ class DipPlane(Common):
         win.show()
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = DipPlane(2)
-    window_main.show()
-    sys.exit(app.exec_())
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = DipPlane(2)
+#     window_main.show()
+#     sys.exit(app.exec_())
