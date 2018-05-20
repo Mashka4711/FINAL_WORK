@@ -221,6 +221,6 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window_main = MainWind()
     # window_main.show()
-    main_window_contain(window_main, 2)
+    # main_window_contain(window_main, 2)
     window_main.show()
     sys.exit(app.exec_())

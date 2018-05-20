@@ -26,6 +26,7 @@ class DipPlane(Common):
         self.result_power = QtGui.QLabel()
         self.new_dossier = QtGui.QPushButton('  Новое дело  ')
         self.dossier_choice = QtGui.QComboBox()
+        self.category = "Расчет силы удара"
 
         self.calculate.clicked.connect(self.invalid_input)
         self.write.clicked.connect(lambda: self.save_new_data(id_emp))
@@ -216,7 +217,8 @@ class DipPlane(Common):
         parse_str = self.dossier_choice.currentText().split('#')
         dossier_num = parse_str[0]
         db_file.save_dip_plane_calculation(self.get_data(self), self.rw_weight.text(), self.rw_height.text(),
-                                           self.surface, dossier_num, id_emp, self.power, self.lab_result_text.text())
+                                           self.surface, dossier_num, id_emp, self.power, self.lab_result_text.text(),
+                                           self.category)
         self.inform('Данные сохранены!')
 
     # Открытие окна создания нового дела

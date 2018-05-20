@@ -21,6 +21,7 @@ class BioAgeKidneys(Common):
         self.lab_result_text = QtGui.QLabel()
         self.result_age = QtGui.QLabel()
         self.dossier_choice = QtGui.QComboBox()
+        self.category = "Расчет биологического возраста"
 
         self.calculate.clicked.connect(self.invalid_input)
         self.new_dossier.clicked.connect(self.open_win_for_new_dossier)
@@ -173,7 +174,7 @@ class BioAgeKidneys(Common):
         parse_str = self.dossier_choice.currentText().split('#')
         dossier_num = parse_str[0]
         db_file.save_bio_age(self.get_data(self), self.rw_glomeruli.text(), self.rw_arteries.text(),
-                             self.rw_stroma.text(), self.result_age.text(), dossier_num, id_emp)
+                             self.rw_stroma.text(), self.result_age.text(), dossier_num, id_emp, self.category)
         self.inform('Данные сохранены!')
 
 

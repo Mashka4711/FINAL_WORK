@@ -21,6 +21,7 @@ class AlcoholExcretion(Common):
         self.lab_result_text = QtGui.QLabel()
         self.result_time = QtGui.QLabel()
         self.dossier_choice = QtGui.QComboBox()
+        self.category = "Расчет времени выведения алкоголя"
 
         self.calculate.clicked.connect(self.invalid_input)
         self.new_dossier.clicked.connect(self.open_win_for_new_dossier)
@@ -171,7 +172,8 @@ class AlcoholExcretion(Common):
         parse_str = self.dossier_choice.currentText().split('#')
         dossier_num = parse_str[0]
         db_file.save_alcohol_excretion(self.get_data(self), self.rw_weight.text(), self.rw_amount.text(),
-                                       self.rw_alc_cont.text(), self.result_time.text(), dossier_num, id_emp)
+                                       self.rw_alc_cont.text(), self.result_time.text(), dossier_num, id_emp,
+                                       self.category)
         self.inform('Данные сохранены!')
 
 

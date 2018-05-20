@@ -21,6 +21,7 @@ class BMI(Common):
         self.dossier_choice = QtGui.QComboBox()
         self.bmi = float
         self.write.setEnabled(False)
+        self.category = 'Определение ИМТ'
 
         self.calculate.clicked.connect(self.invalid_input)
         self.new_dossier.clicked.connect(self.open_win_for_new_dossier)
@@ -189,7 +190,7 @@ class BMI(Common):
         parse_str = self.dossier_choice.currentText().split('#')
         dossier_num = parse_str[0]
         db_file.save_bmi_calculation(self.get_data(self), self.rw_weight.text(), self.rw_height.text(), self.bmi,
-                                     self.lab_result_text.text(), dossier_num, id_emp)
+                                     self.lab_result_text.text(), dossier_num, id_emp, self.category)
         self.inform('Данные сохранены!')
 
 

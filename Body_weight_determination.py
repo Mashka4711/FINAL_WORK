@@ -30,6 +30,7 @@ class BodyWeight(Common):
         self.k_thorax = float
         self.k_leg = float
         self.sex = ''
+        self.category = 'Определение массы тела'
 
         self.calculate.clicked.connect(self.invalid_input)
         self.new_dossier.clicked.connect(self.open_win_for_new_dossier)
@@ -230,7 +231,7 @@ class BodyWeight(Common):
         dossier_num = parse_str[0]
         db_file.save_body_weight_determination(self.get_data(self), self.rw_height.text(), self.rw_thorax.text(),
                                                self.rw_leg.text(), self.rw_breech.text(), self.sex,
-                                               self.result_weight.text(), dossier_num, id_emp)
+                                               self.result_weight.text(), dossier_num, id_emp, self.category)
         self.inform('Данные сохранены!')
 
 

@@ -260,12 +260,12 @@ def new_dossier(man_name, man_surname, man_birthday):
 
 
 def save_dip_plane_calculation(calc_date, weight, height, rigidity, dossier_no_dossier, employees_id_emp, res_power,
-                               result):
+                               result, category):
     conn = getConnection()
     note_query = "INSERT INTO dip_plane_calc (calc_date, weight, height, rigidity, res_power, result," \
-                 " dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
-                 " '%s', '%s', '%s')" % (calc_date, weight, height, rigidity, res_power, result, dossier_no_dossier,
-                                         employees_id_emp)
+                 " dossier_no_dossier, employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s', '%s')" % (calc_date, weight, height, rigidity, res_power, result,
+                                               dossier_no_dossier, employees_id_emp, category)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -277,11 +277,12 @@ def save_dip_plane_calculation(calc_date, weight, height, rigidity, dossier_no_d
 # Запись параметров экспертизы ИМТ в базу
 
 
-def save_bmi_calculation(calc_date, weight, height, res_bmi, result, dossier_no_dossier, employees_id_emp):
+def save_bmi_calculation(calc_date, weight, height, res_bmi, result, dossier_no_dossier, employees_id_emp, category):
     conn = getConnection()
     note_query = "INSERT INTO bmi_calc (calc_date, weight, height, res_bmi, result, dossier_no_dossier," \
-                 "employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
-                 " '%s', '%s')" % (calc_date, weight, height, res_bmi, result, dossier_no_dossier, employees_id_emp)
+                 "employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s')" % (calc_date, weight, height, res_bmi, result, dossier_no_dossier,
+                                         employees_id_emp, category)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -293,12 +294,12 @@ def save_bmi_calculation(calc_date, weight, height, res_bmi, result, dossier_no_
 
 
 def save_body_weight_determination(calc_date, height, thorax, leg, breech, sex, res_weight, dossier_no_dossier,
-                                   employees_id_emp):
+                                   employees_id_emp, category):
     conn = getConnection()
     note_query = "INSERT INTO weight_determination (calc_date, height, thorax, leg, breech, sex, res_weight," \
-                 "dossier_no_dossier, employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s'," \
-                 " '%s', '%s', '%s', '%s')" % (calc_date, height, thorax, leg, breech, sex, res_weight,
-                                               dossier_no_dossier, employees_id_emp)
+                 "dossier_no_dossier, employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s'," \
+                 " '%s', '%s', '%s', '%s', '%s')" % (calc_date, height, thorax, leg, breech, sex, res_weight,
+                                                     dossier_no_dossier, employees_id_emp, category)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -310,13 +311,12 @@ def save_body_weight_determination(calc_date, height, thorax, leg, breech, sex, 
 # Запись параметров экспертизы определения времени выведения алкоголя в базу
 
 
-def save_alcohol_excretion(calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier, employees_id_emp):
+def save_alcohol_excretion(calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier, employees_id_emp,
+                           category):
     conn = getConnection()
     note_query = "INSERT INTO alcohol_excretion (calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier," \
-                 "employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (calc_date, weight, amount,
-                                                                                          alc_cont, res_time,
-                                                                                          dossier_no_dossier,
-                                                                                          employees_id_emp)
+                 "employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
+                 (calc_date, weight, amount, alc_cont, res_time, dossier_no_dossier, employees_id_emp, category)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -327,13 +327,11 @@ def save_alcohol_excretion(calc_date, weight, amount, alc_cont, res_time, dossie
 # Запись параметров экспертизы определения биологического возраста базу
 
 
-def save_bio_age(calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier, employees_id_emp):
+def save_bio_age(calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier, employees_id_emp, category):
     conn = getConnection()
     note_query = "INSERT INTO bio_age_kidneys (calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier," \
-                 "employees_id_emp) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')" % (calc_date, glomeruli,
-                                                                                          arteries, stroma, res_age,
-                                                                                          dossier_no_dossier,
-                                                                                          employees_id_emp)
+                 "employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
+                 (calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier, employees_id_emp, category)
     print(note_query)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
@@ -341,3 +339,115 @@ def save_bio_age(calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dos
     except MySQLdb.IntegrityError as err:
         print("Error: {}".format(err))
     conn.commit()
+
+
+# Загрузка архива
+
+
+def load_archive():
+    conn = getConnection()
+    words = []
+
+    tables = ['expertise_calc', 'alcohol_excretion', 'weight_determination', 'bmi_calc', 'bio_age_kidneys',
+              'dip_plane_calc']
+    for table in tables:
+        notes_query = "SELECT no_calc, category, calc_date, m_name, surname FROM " + table + ", dossier " \
+                      "WHERE " + table + ".dossier_no_dossier = dossier.no_dossier ORDER BY calc_date;"
+        curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_notes.execute(notes_query)
+        notes = curs_notes.fetchall()
+
+        for note in notes:
+            words.append(str(note['no_calc']) + "#" + str(note['category']) + ": " + str(note['m_name']) + " " + str(note['surname']) + ", "
+                         + str(note['calc_date']))
+
+        # str_word = note['category'] + " "
+        # exp_name = note['table_name']
+
+        # notes_query = "SELECT calc_date, m_name, surname FROM expertise_calc, dossier " \
+        #               "WHERE expertise_calc.dossier_no_dossier = dossier.no_dossier;"
+        # curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+        # curs_notes.execute(notes_query)
+        # entries = curs_notes.fetchall()
+
+        # for entry in entries:
+        #     print(str(entry['m_name']) + " " + entry['surname'] + " " + str(entry['calc_date']))
+        # dict(entries)
+
+        # words.append(str_word)
+    return words
+
+
+# Загрузка (чего-то конкретного) из архива
+
+
+def load_from_archive(table, id_exp):
+    conn = getConnection()
+    notes_query = "SELECT * FROM " + table + ", employees WHERE no_calc = " + id_exp + " AND id_emp = employees_id_emp;"
+    curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_notes.execute(notes_query)
+    notes = curs_notes.fetchall()
+    notes_all = []
+
+    if table == 'expertise_calc':
+        for note in notes:
+            str_alc_cont = note['alc_cont']
+            str_amount = note['amount']
+            str_result = note['result']
+            str_res_conc = note['res_concentration']
+            str_sex = note['sex']
+            str_weight = note['weight']
+            str_fullness = note['fullness']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_alc_cont, str_amount, str_result, str_res_conc, str_sex, str_weight, str_fullness,
+                         str_name, str_surname]
+    elif table == 'alcohol_excretion':
+        for note in notes:
+            str_weight = note['weight']
+            str_amount = note['amount']
+            str_alc_cont = note['alc_cont']
+            str_res_time = note['res_time']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_weight, str_amount, str_alc_cont, str_res_time, str_name, str_surname]
+    elif table == 'weight_determination':
+        for note in notes:
+            str_height = note['height']
+            str_thorax = note['thorax']
+            str_leg = note['leg']
+            str_breech = note['breech']
+            str_res_weight = note['res_weight']
+            str_sex = note['sex']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_height, str_thorax, str_leg, str_breech, str_res_weight, str_sex, str_name, str_surname]
+    elif table == 'bmi_calc':
+        for note in notes:
+            str_weight = note['weight']
+            str_height = note['height']
+            str_res_bmi = note['res_bmi']
+            str_result = note['result']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_weight, str_height, str_res_bmi, str_result, str_name, str_surname]
+    elif table == 'bio_age_kidneys':
+        for note in notes:
+            str_glomeruli = note['glomeruli']
+            str_arteries = note['arteries']
+            str_stroma = note['stroma']
+            str_res_age = note['res_age']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_glomeruli, str_arteries, str_stroma, str_res_age, str_name, str_surname]
+    elif table == 'dip_plane_calc':
+        for note in notes:
+            str_weight = note['weight']
+            str_height = note['height']
+            str_rigidity = note['rigidity']
+            str_res_power = note['res_power']
+            str_result = note['result']
+            str_name = note['emp_name']
+            str_surname = note['emp_surname']
+            notes_all = [str_weight, str_height, str_rigidity, str_result, str_res_power, str_name, str_surname]
+    return notes_all
