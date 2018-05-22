@@ -7,6 +7,7 @@ from Body_weight_determination import BodyWeight
 from BMI_calculation import BMI
 from Changes_in_the_kidneys import BioAgeKidneys
 from Dip_in_the_plane import DipPlane
+from Archive import Archive
 
 
 # class ModalWind(QtGui.QWidget):
@@ -195,7 +196,7 @@ def run_expertise(wind, exp_id, emp_id):
     elif exp_id == 51:
         win = DipPlane(emp_id)
     elif exp_id == 61:
-        pass
+        win = Archive()
     win.show()
 
 

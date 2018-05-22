@@ -14,8 +14,7 @@ class Archive(Common):
         self.describe = QtGui.QLabel("")
         self.describe.setWordWrap(True)
         self.describe.setStyleSheet('font-size: 20px; font-family: Proggy; background-color: #bed2f7;'
-                                    'margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;'
-                                    'color: white')
+                                    'margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;')
         self.describe.setMinimumSize(600, 200)
         self.describe.setMaximumSize(1000, 600)
 
@@ -29,7 +28,7 @@ class Archive(Common):
     # Содержимое формы
 
     def contain(self):
-        lab_intro = QtGui.QLabel('Список сотрудников лаборатории:')
+        lab_intro = QtGui.QLabel('Архив:')
         lab_intro.setObjectName('lab_intro')
 
         items = db_file.load_archive()
@@ -40,7 +39,7 @@ class Archive(Common):
 
             qitem = QtGui.QListWidgetItem(self.expertise_list)
             # qitem.setBackgroundColor(QtGui.QColor("#bed2f7"))
-            qitem.setForeground(QtGui.QBrush(QtGui.QColor("#ff0000")))
+            qitem.setForeground(QtGui.QBrush(QtGui.QColor("#ffffff")))
             # qitem.setText(str(parse_item[0]))
             qitem.setText(str(item))
 
@@ -53,20 +52,21 @@ class Archive(Common):
 
         vertical = QtGui.QVBoxLayout()
         vertical.addStretch(1)
+        vertical.addWidget(lab_intro)
+        # vertical.addStretch(1)
         vertical.addWidget(self.expertise_list)
         vertical.addStretch(2)
         vertical.setContentsMargins(100, 0, 100, 0)
 
         self.setLayout(vertical)
-        # self.setStyleSheet('QLabel#lab_name, #lab_surname, #lab_patr, #lab_age, #lab_post, #lab_education,'
-        #                    '#lab_right, #lab_login_new, #lab_pass_new, #lab_intro'
-        #                    ' {color: white; font-size: 20px; font-family: Proggy}'
-        #                    'QLineEdit {font-size: 20px}'
-        #                    'QComboBox {font-size: 20px}'
-        #                    'QPushButton#button_edit, #button_del {font-size: 20px; font-family: Proggy; border: 2px;'
-        #                    'border-radius: 6px; background-color: white; min-height: 30px;}'
-        #                    'QPushButton#button_edit:hover {background-color: #87cefa}'
-        #                    'QPushButton#button_del:hover {background-color: #87cefa}')
+        self.setStyleSheet('QLabel#lab_intro {color: white; font-size: 30px; font-family: Proggy}'
+                           'QLineEdit {font-size: 20px}'
+                           'QComboBox {font-size: 20px}'
+                           'QPushButton#button_edit, #button_del {font-size: 20px; font-family: Proggy; border: 2px;'
+                           'border-radius: 6px; background-color: white; min-height: 30px;}'
+                           'QPushButton#button_edit:hover {background-color: #87cefa}'
+                           'QPushButton#button_del:hover {background-color: #87cefa}'
+                           'QListWidget {border: 5px solid #888888}')
 
     # Обработчик нажатия на пункт списка
 

@@ -1,10 +1,11 @@
 from PyQt4 import QtCore, QtGui
 from Common_odj import Common
 import db_file
+from New_term import TermNew
 
 
 class TermList(Common):
-    def __init__(self, parent=None):
+    def __init__(self, parametr, parent=None):
         super(TermList, self).__init__(parent)
         self.setWindowFlags(QtCore.Qt.Dialog | QtCore.Qt.WindowSystemMenuHint)
         self.setWindowModality(QtCore.Qt.WindowModal)
@@ -15,6 +16,9 @@ class TermList(Common):
         self.word_list_w = QtGui.QListWidget()
 
         self.describe = QtGui.QLabel("")
+        self.button_add = QtGui.QPushButton('  Добавить  ')
+        self.button_add.setEnabled(parametr)
+        # self.button_refresh = QtGui.QPushButton(' Обновить ')
 
         self.contain()
 
@@ -23,6 +27,12 @@ class TermList(Common):
     def contain(self):
         lab_search = QtGui.QLabel('Поиск: ')
         lab_search.setObjectName('lab_search')
+
+        # self.button_refresh.setObjectName('but_fresh')
+        self.button_add.setObjectName('but_add')
+
+        self.button_add.clicked.connect(self.open_new_term)
+        # self.button_refresh.clicked.connect(lambda: self.word_list_w.addItems(db_file.load_directory("")))
 
         self.button_search.setObjectName('button_search')
         self.button_search.setIcon(QtGui.QIcon('png/QampatykB (10).png'))
@@ -47,22 +57,32 @@ class TermList(Common):
         horizontal.addWidget(search_frame)
 
         vertical = QtGui.QVBoxLayout()
+        but_lay = QtGui.QHBoxLayout()
+
+        but_lay.addStretch(1)
+        but_lay.addWidget(self.button_add)
+        # but_lay.addWidget(self.button_refresh)
+        but_lay.addStretch(1)
 
         vertical.addStretch(1)
         vertical.addLayout(horizontal)
         vertical.addStretch(1)
         vertical.addWidget(self.word_list_w)
-        vertical.addStretch(2)
+        vertical.addStretch(1)
+        vertical.addLayout(but_lay)
+        vertical.addStretch(1)
         vertical.setContentsMargins(100, 0, 100, 0)
 
         self.setLayout(vertical)
 
         self.setStyleSheet('QLabel#lab_heading, #lab_search {color: white; font-size: 20px; font-family: Proggy}'
                            'QLineEdit {font-size: 20px}'
-                           'QPushButton#button_search {font-size: 20px; font-family: Proggy; border: 2px;'
-                           'border-radius: 6px; background-color: white; min-height: 30px;}'
+                           'QPushButton#button_search, #but_add, #but_fresh {font-size: 20px; font-family: Proggy;'
+                           'border: 2px; border-radius: 6px; background-color: white; min-height: 30px;}'
                            'QListWidget {border: 5px solid #888888}'
-                           'QPushButton#button_search:hover {background-color: #87cefa}')
+                           'QPushButton#button_search:hover {background-color: #87cefa}'
+                           'QPushButton#but_add:hover {background-color: #87cefa}'
+                           'QPushButton#but_fresh:hover {background-color: #87cefa}')
 
     # Обработчик нажатия на пункт списка
 
@@ -82,10 +102,15 @@ class TermList(Common):
         self.word_list_w.clear()
         self.word_list_w.addItems(db_file.load_directory(self.rw_input.text()))
 
+    # Открытие формы добавления нового термина
+    def open_new_term(self):
+        win = TermNew(self)
+        win.show()
 
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    window_main = TermList()
-    window_main.show()
-    sys.exit(app.exec_())
+
+# if __name__ == "__main__":
+#     import sys
+#     app = QtGui.QApplication(sys.argv)
+#     window_main = TermList()
+#     window_main.show()
+#     sys.exit(app.exec_())

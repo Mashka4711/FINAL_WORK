@@ -5,12 +5,6 @@ def getConnection():
     conn = MySQLdb.connect(host="localhost", user="root",
                            passwd="root", db="database_2", charset="utf8")
     return conn
-'''try:
-    conn = MySQLdb.connect(host="localhost", user="root",
-                               passwd="root", db="database_1", charset="utf8")
-except MySQLdb.Error as err:
-    print("Connection error: {}".format(err))
-    conn.close()'''
 
 # Авторизация
 
@@ -111,7 +105,7 @@ def edit_emp_note(id, name, surname, patr, age, post, education, right, login, p
     note_query = "UPDATE employees SET emp_surname = '%s', emp_name = '%s', emp_patronimyc = '%s', emp_post = '%s', " \
                  "emp_rights = '%s', emp_age = '%s', emp_education = '%s', emp_login = '%s', emp_password = '%s', emp_photo = '%s' " \
                  "WHERE id_emp = '%s'" % (surname, name, patr, post, right, age, education, login, password, photo, id)
-    print(note_query)
+    # print(note_query)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -184,7 +178,7 @@ def del_emp(id_employee):
 
 def load_directory(word_part):
     conn = getConnection()
-    notes_query = "SELECT term_name FROM guide WHERE term_name LIKE '" + word_part + "%'"
+    notes_query = "SELECT term_name FROM guide WHERE term_name LIKE '" + word_part + "%' ORDER BY term_name"
     curs_notes = conn.cursor(MySQLdb.cursors.DictCursor)
     curs_notes.execute(notes_query)
     notes = curs_notes.fetchall()
@@ -332,7 +326,7 @@ def save_bio_age(calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dos
     note_query = "INSERT INTO bio_age_kidneys (calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier," \
                  "employees_id_emp, category) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
                  (calc_date, glomeruli, arteries, stroma, res_age, dossier_no_dossier, employees_id_emp, category)
-    print(note_query)
+    # print(note_query)
     try:
         curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
         curs_note.execute(note_query)
@@ -451,3 +445,30 @@ def load_from_archive(table, id_exp):
             str_surname = note['emp_surname']
             notes_all = [str_weight, str_height, str_rigidity, str_result, str_res_power, str_name, str_surname]
     return notes_all
+
+# Запись термина в базу
+
+
+def save_term(name, description):
+    conn = getConnection()
+    note_query = "INSERT INTO guide (term_name, description) VALUES ('%s', '%s')" % (name, description)
+    try:
+        curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+        curs_note.execute(note_query)
+    except MySQLdb.IntegrityError as err:
+        print("Error: {}".format(err))
+    conn.commit()
+
+# Проерка на уже существующий термин
+
+
+def term_comparison(name):
+    conn = getConnection()
+    note_query = "SELECT term_name FROM guide"
+    curs_note = conn.cursor(MySQLdb.cursors.DictCursor)
+    curs_note.execute(note_query)
+    notes = curs_note.fetchall()
+    for note in notes:
+        term_bd = dict(note)
+        if name == term_bd['term_name']:
+            return True
